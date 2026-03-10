@@ -11,6 +11,8 @@
             <p>
                 This is your brand new Laravel app. Time to make it sing (or chirp!)
             </p>
+
+            <p class="mt-2 text-sm text-gray-600">Now live on the internet! 🎉</p>
         </div>
     </div>
 </x-layout>
