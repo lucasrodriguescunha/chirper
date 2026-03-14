@@ -2,10 +2,42 @@
     <x-slot:title>
         Home Feed
     </x-slot:title>
-
     <div class="max-w-2xl mx-auto">
         <h1 class="text-3xl font-bold mt-8">Latest Chirps</h1>
+        <div class="card bg-base-100 shadow mt-8">
+            <div class="card-body">
+                <form method="POST" action="/chirps">
+                    <!-- CSRF (Cross-Site Request Forgery) -->
+                    @csrf
+                    <div class="form-control w-full">
+                        <textarea
+                            name="message"
+                            placeholder="What's on your mind?"
+                            class="textarea textarea-bordered w-full resize-none @error('message') textarea-error @enderror"
+                            rows="4"
+                            maxlength="255"
+                        >{{ old('message') }}</textarea>
 
+                        @error('message')
+                        <div class="label">
+                            <span class="label-text-alt text-error">{{ $message }}</span>
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="mt-4 flex items-center justify-end">
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-sm"
+                        >
+                            Chirp
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Chirp comment -->
         <div class="space-y-4 mt-8">
             @forelse ($chirps as $chirp)
                 <x-chirp :chirp="$chirp"/>
@@ -13,7 +45,6 @@
                 <div class="hero py-12">
                     <div class="hero-content text-center">
                         <div>
-
                             <svg
                                 class="mx-auto h-12 w-12 opacity-30"
                                 fill="none"
