@@ -67,5 +67,9 @@
                 </div>
             @endforelse
         </div>
+
+        <div class="mt-6">
+            {{ $chirps->links('vendor.pagination.simple-tailwind') }}
+        </div>
     </div>
 </x-layout>
