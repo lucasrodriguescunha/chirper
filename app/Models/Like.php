@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Like extends Model
 {
-    protected $fillable = ['user_id', 'chirp_id'];
+    protected $fillable = ['user_id', 'chirp_id', 'type'];
 
     public function user(): BelongsTo
     {

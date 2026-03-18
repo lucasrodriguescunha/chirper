@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\Like\Like;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Chirp extends Model
 {
@@ -22,14 +22,17 @@ class Chirp extends Model
      */
     public function likes(): HasMany
     {
-        return $this->$hasMany(Like::class);
+        return $this->hasMany(\App\Models\Like::class);
     }
 
     /*
-     * Check if a specific user has already liked this chirp.
-     */
-    public function isLikedBy(User $user): bool
+    * Returns the user's response:
+    * 'liked', 'disliked', or null
+    */
+    public function userReaction(User $user): ?string
     {
-        return $this->likes()->where('user_id', $user->id)->exists();
+        return $this->likes()
+            ->where('user_id', $user->id)
+            ->value('type');
     }
 }

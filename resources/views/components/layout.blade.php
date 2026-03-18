@@ -11,17 +11,15 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css"/>
     <meta property="og:image" content={{ asset('images/og.jpeg') }} />
     <meta property="og:title" content="Chirper"/>
-    <meta property="og:description"
-          content="A demo social media platform highlighting the power and simplicity of Laravel."/>
+    <meta property="og:description" content="A demo social media platform highlighting the power and simplicity of Laravel."/>
     <meta property="og:url" content="https://chirper.laravel.cloud"/>
-
-    <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96x96.png') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/userReaction.js'])
 </head>
 
 <body class="min-h-screen flex flex-col

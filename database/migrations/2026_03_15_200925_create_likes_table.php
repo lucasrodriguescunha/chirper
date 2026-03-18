@@ -12,11 +12,12 @@ return new class extends Migration {
     {
         Schema::create('likes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->contrained()->cascadeOnDelete();
-            $table->foreignid('chirp_id')->contrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('chirp_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
 
-            $table->unique(['user_id', 'chirp_id']); // prevents double like
+            // A user can only have 1 interaction per post.
+            $table->unique(['user_id', 'chirp_id']);
         });
     }
 

@@ -32,6 +32,15 @@
                         >
                             Chirp
                         </button>
+
+                        <input class="btn btn" type="file">
+
+                        <button
+                            type="submit"
+                            class="btn btn-secondary btn-sm"
+                        >
+                            Upload
+                        </button>
                     </div>
                 </form>
             </div>

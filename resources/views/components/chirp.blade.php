@@ -69,6 +69,36 @@
                 <p class="mt-1">
                     {{ $chirp->message }}
                 </p>
+
+                @php
+                    $reaction = auth()->check() ? $chirp->userReaction(auth()->user()) : null;
+                @endphp
+
+                <div class="flex items-center gap-3 mt-1">
+                    <button
+                        class="reaction-button hover:scale-110 transition {{ $reaction === 'like' ? 'text-red-600' : '' }}"
+                        data-chirp-id="{{ $chirp->id }}"
+                        data-type="like"
+                    >
+                        @if($reaction === 'like')
+                            <x-feathericon-heart class="w-5 h-5 fill-current"/>
+                        @else
+                            <x-feathericon-heart class="w-6 h-6"/>
+                        @endif
+                    </button>
+
+                    <button
+                        class="reaction-button hover:scale-110 transition {{ $reaction === 'dislike' ? 'text-red-600' : '' }}"
+                        data-chirp-id="{{ $chirp->id }}"
+                        data-type="dislike"
+                    >
+                        @if($reaction === 'dislike')
+                            <x-ri-thumb-down-line class="w-6 h-6 fill-current"/>
+                        @else
+                            <x-ri-thumb-down-line class="w-6 h-6"/>
+                        @endif
+                    </button>
+                </div>
             </div>
         </div>
     </div>

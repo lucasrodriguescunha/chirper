@@ -29,10 +29,15 @@ class Register extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
+        // Send verification email
+        $user->sendEmailVerificationNotification();
+
         // Log them in
         Auth::login($user);
 
+        return redirect('/email/verify');
+
         // Redirect to home
-        return redirect('/')->with('success', 'Welcome to Chirper!');
+        // return redirect('/')->with('success', 'Welcome to Chirper!');
     }
 }

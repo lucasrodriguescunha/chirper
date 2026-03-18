@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Auth\Login;
 use App\Http\Controllers\Auth\Logout;
 use App\Http\Controllers\Auth\Register;
 use App\Http\Controllers\ChirpController;
+use App\Http\Controllers\Like\Like;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
 /*
@@ -16,8 +17,9 @@ Route::get('/', [ChirpController::class, 'index']);
 Route::middleware('auth', 'verified')->group(function () {
     Route::resource('chirps', ChirpController::class)
         ->only(['store', 'edit', 'update', 'destroy']);
-});
 
+    Route::post('/chirps/{chirp}/reaction', Like::class);
+});
 
 /*
  * Register
@@ -58,7 +60,7 @@ Route::get('/email/verify', function () {
 })->middleware('auth')->name('verification.notice');
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fullfill();
+    $request->fulfill();
 
     return redirect('')->with('success', 'Email has been verified!');
 })->middleware(['auth', 'signed'])->name('verification.verify');
@@ -68,6 +70,14 @@ Route::post('/email/verification-notification', function (Request $request) {
 
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+//Mail::raw('Email verification message', function ($message) {
+//    $message->to('test@emai.com')
+//        ->subject('Email verification test');
+//});
+
+
+
 
 
 
