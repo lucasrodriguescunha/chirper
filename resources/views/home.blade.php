@@ -25,21 +25,14 @@
                         @enderror
                     </div>
 
-                    <div class="mt-4 flex items-center justify-end">
+                    <div class="mt-4 flex items-center justify-end gap-2">
+                        <input type="file" class="file-input file-input-sm" />
+
                         <button
                             type="submit"
                             class="btn btn-primary btn-sm"
                         >
                             Chirp
-                        </button>
-
-                        <input class="btn btn" type="file">
-
-                        <button
-                            type="submit"
-                            class="btn btn-secondary btn-sm"
-                        >
-                            Upload
                         </button>
                     </div>
                 </form>
