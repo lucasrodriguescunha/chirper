@@ -1,4 +1,5 @@
 @props(['chirp'])
+@use('Illuminate\Support\Facades\Storage')
 
 <div class="card bg-base-100">
     <div class="card-body">
@@ -70,33 +71,29 @@
                     {{ $chirp->message }}
                 </p>
 
-                @php
-                    $reaction = auth()->check() ? $chirp->userReaction(auth()->user()) : null;
-                @endphp
+                @if ($chirp->attachments?->path && Storage::disk('public')->exists($chirp->attachments->path))
+                    @if (in_array($chirp->attachments->type, ['txt', 'pdf', 'svg', 'gif']))
+                        <a href="{{ Storage::url($chirp->attachments->path) }}" download="true">Baixaki</a>
+                    @else
+                        <img src="{{ Storage::url($chirp->attachments->path) }}" alt=""/>
+                    @endif
+                @endif
 
-                <div class="flex items-center gap-3 mt-1">
+                <div class="flex items-center gap-3 mt-3">
                     <button
-                        class="reaction-button hover:scale-110 transition {{ $reaction === 'like' ? 'text-red-600' : '' }}"
+                        class="reaction-button hover:scale-110 transition"
                         data-chirp-id="{{ $chirp->id }}"
                         data-type="like"
                     >
-                        @if($reaction === 'like')
-                            <x-feathericon-heart class="w-5 h-5 fill-current"/>
-                        @else
-                            <x-feathericon-heart class="w-6 h-6"/>
-                        @endif
+                        <x-feathericon-heart class="w-5 h-5"/>
                     </button>
 
                     <button
-                        class="reaction-button hover:scale-110 transition {{ $reaction === 'dislike' ? 'text-red-600' : '' }}"
+                        class="reaction-button hover:scale-110 transition"
                         data-chirp-id="{{ $chirp->id }}"
                         data-type="dislike"
                     >
-                        @if($reaction === 'dislike')
-                            <x-ri-thumb-down-line class="w-6 h-6 fill-current"/>
-                        @else
-                            <x-ri-thumb-down-line class="w-6 h-6"/>
-                        @endif
+                        <x-ri-thumb-down-line class="w-5 h-5"/>
                     </button>
                 </div>
             </div>

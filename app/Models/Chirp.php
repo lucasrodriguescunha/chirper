@@ -5,11 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Chirp extends Model
 {
     protected $fillable = [
-        'message'
+        'message',
+        'file_path',
+        'file_type',
+        'path',
+        'type'
     ];
 
     public function user(): BelongsTo
@@ -22,17 +27,11 @@ class Chirp extends Model
      */
     public function likes(): HasMany
     {
-        return $this->hasMany(\App\Models\Like::class);
+        return $this->hasMany(Like::class);
     }
 
-    /*
-    * Returns the user's response:
-    * 'liked', 'disliked', or null
-    */
-    public function userReaction(User $user): ?string
+    public function attachments(): HasOne
     {
-        return $this->likes()
-            ->where('user_id', $user->id)
-            ->value('type');
+        return $this->hasOne(ChirpAttachment::class);
     }
 }

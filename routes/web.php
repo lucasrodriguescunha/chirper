@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\Auth\Login;
-use App\Http\Controllers\Auth\Logout;
-use App\Http\Controllers\Auth\Register;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ChirpController;
-use App\Http\Controllers\Like\Like;
+use App\Http\Controllers\Like\LikeController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -18,37 +18,37 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::resource('chirps', ChirpController::class)
         ->only(['store', 'edit', 'update', 'destroy']);
 
-    Route::post('/chirps/{chirp}/reaction', Like::class);
+    Route::post('/chirps/{chirp}/reaction', LikeController::class);
 });
 
 /*
- * Register
+ * RegisterController
  */
 
 Route::view('/register', 'auth.register')
     ->middleware('guest')
     ->name('register');
 
-Route::post('/register', Register::class)
+Route::post('/register', RegisterController::class)
     ->middleware('guest');
 
 /*
- * Logout
+ * LogoutController
  */
 
-Route::post('/logout', Logout::class)
+Route::post('/logout', LogoutController::class)
     ->middleware('auth')
     ->name('logout');
 
 /*
- * Login
+ * LoginController
  */
 
 Route::view('/login', 'auth.login')
     ->middleware('guest')
     ->name('login');
 
-Route::post('/login', Login::class)
+Route::post('/login', LoginController::class)
     ->middleware('guest');
 
 /*

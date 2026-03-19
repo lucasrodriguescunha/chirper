@@ -3,8 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', async (e) => {
             e.preventDefault();
 
-            const chirpId = button.dataset.chirpId;
-            const type = button.dataset.type;
+            const btn = e.currentTarget;
+            const chirpId = btn.dataset.chirpId;
+            const type = btn.dataset.type;
 
             try {
                 const response = await fetch(`/chirps/${chirpId}/reaction`, {
@@ -19,16 +20,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response.ok) {
-                    const buttons = document.querySelectorAll(
+                    const allButtons = document.querySelectorAll(
                         `.reaction-button[data-chirp-id="${chirpId}"]`
                     );
 
-                    const isActive = button.classList.contains('text-red-600');
+                    const isActive = btn.classList.contains('text-red-600');
 
-                    buttons.forEach(btn => btn.classList.remove('text-red-600'));
+                    allButtons.forEach(b => b.classList.remove('text-red-600'));
 
                     if (!isActive) {
-                        button.classList.add('text-red-600');
+                        btn.classList.add('text-red-600');
                     }
                 }
 

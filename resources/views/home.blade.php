@@ -6,7 +6,7 @@
         <h1 class="text-3xl font-bold mt-8">Latest Chirps</h1>
         <div class="card bg-base-100 shadow mt-8">
             <div class="card-body">
-                <form method="POST" action="/chirps">
+                <form method="POST" action="/chirps" enctype="multipart/form-data">
                     <!-- CSRF (Cross-Site Request Forgery) -->
                     @csrf
                     <div class="form-control w-full">
@@ -26,13 +26,19 @@
                     </div>
 
                     <div class="mt-4 flex items-center justify-end gap-2">
-                        <input type="file" class="file-input file-input-sm" />
+                        <input type="file" name="attachment" class="file-input file-input-sm"/>
+
+                        @error('attachment')
+                        <div class="label">
+                            <span class="label-text-alt text-error">{{ $message }}</span>
+                        </div>
+                        @enderror
 
                         <button
                             type="submit"
                             class="btn btn-primary btn-sm"
                         >
-                            Chirp
+                            <x-carbon-send class="w-5 h-5"/>
                         </button>
                     </div>
                 </form>

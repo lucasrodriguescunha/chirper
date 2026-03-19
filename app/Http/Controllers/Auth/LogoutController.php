@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class Logout extends Controller
+class LogoutController extends Controller
 {
     /**
      * Handle the incoming request.

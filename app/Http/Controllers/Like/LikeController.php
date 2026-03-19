@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Chirp;
 use Illuminate\Http\Request;
 
-class Like extends Controller
+class LikeController extends Controller
 {
     public function __invoke(Request $request, Chirp $chirp)
     {

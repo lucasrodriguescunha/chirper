@@ -15,7 +15,7 @@ class ChirpController extends Controller
      */
     public function index()
     {
-        $chirps = Chirp::with('user')
+        $chirps = Chirp::with(['user', 'attachments'])
             ->latest()
             ->paginate(5);
 
@@ -38,18 +38,34 @@ class ChirpController extends Controller
         // Validate the request
         $validated = $request->validate([
             'message' => 'required|string|max:255',
+            'attachment' => 'nullable|file|max:2048|mimes:jpg,webp,jpeg,png,gif,pdf,txt',
         ], [
             'message.required' => 'Please write something to chirp!',
-            'message.max' => 'Chirps must be 255 characters or less'
+            'message.max' => 'Chirps must be 255 characters or less',
+            'attachment.max' => 'File must be under 2MB',
+            'attachment.mimes' => 'Only images, PDFs and text files are allowed',
         ]);
 
         // Create the chirp
-        auth()->user()->chirps()->create($validated);
+        $chirp = auth()->user()->chirps()->create([
+            'message' => $validated['message'],
+        ]);
+
+        // Save the attachment if there is one.
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $path = $file->store('attachments', 'public');
+
+            $chirp->attachments()->create([
+                'path' => $path,
+                'type' => $file->getClientOriginalExtension(),
+            ]);
+        }
 
         return redirect('/')->with('success', 'Your chirp has been posted!');
     }
 
-    /**
+    /*
      * Display the specified resource.
      */
     public function show(string $id)

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
-class Login extends Controller
+class LoginController extends Controller
 {
     protected int $maxAttempts = 3;
     protected int $decaySeconds = 900;
