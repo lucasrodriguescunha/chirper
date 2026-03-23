@@ -73,15 +73,21 @@
 
                 @if ($chirp->attachments?->path && Storage::disk('public')->exists($chirp->attachments->path))
                     @if (in_array($chirp->attachments->type, ['txt', 'pdf', 'svg', 'gif']))
-                        <a href="{{ Storage::url($chirp->attachments->path) }}" download="true">Baixaki</a>
+                        <a href="{{ Storage::url($chirp->attachments->path) }}" download="true">Baixar conteúdo</a>
                     @else
-                        <img src="{{ Storage::url($chirp->attachments->path) }}" alt=""/>
+                        <img class="mt-1" src="{{ Storage::url($chirp->attachments->path) }}" alt=""/>
                     @endif
                 @endif
 
                 <div class="flex items-center gap-3 mt-3">
+                    @php
+                        $userReaction = auth()->check()
+                            ? $chirp->likes->where('user_id', auth()->id())->first()?->type
+                            : null;
+                    @endphp
+
                     <button
-                        class="reaction-button hover:scale-110 transition"
+                        class="reaction-button hover:scale-110 transition {{ $userReaction === 'like' ? 'text-red-600' : '' }}"
                         data-chirp-id="{{ $chirp->id }}"
                         data-type="like"
                     >
@@ -89,7 +95,7 @@
                     </button>
 
                     <button
-                        class="reaction-button hover:scale-110 transition"
+                        class="reaction-button hover:scale-110 transition {{ $userReaction === 'dislike' ? 'text-red-600' : '' }}"
                         data-chirp-id="{{ $chirp->id }}"
                         data-type="dislike"
                     >

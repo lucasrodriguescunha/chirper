@@ -3,20 +3,15 @@
 namespace App\Http\Controllers\Like;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LikeRequest;
 use App\Models\Chirp;
-use Illuminate\Http\Request;
 
 class LikeController extends Controller
 {
-    public function __invoke(Request $request, Chirp $chirp)
+    public function __invoke(LikeRequest $request, Chirp $chirp)
     {
         $user = auth()->user();
-
         $type = $request->input('type');
-
-        if (!in_array($type, ['like', 'dislike'])) {
-            return back()->with('error', 'Invalid action');
-        }
 
         $existingLike = $chirp->likes()
             ->where('user_id', $user->id)
@@ -31,12 +26,10 @@ class LikeController extends Controller
         } else {
             $chirp->likes()->create([
                 'user_id' => $user->id,
-                'type' => $type
+                'type' => $type,
             ]);
         }
 
-        return response()->json([
-           'success' => true
-        ]);
+        return response()->json(['success' => true]);
     }
 }

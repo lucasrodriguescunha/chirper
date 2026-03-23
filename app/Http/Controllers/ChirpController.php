@@ -2,80 +2,75 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\StoreChirpAttachmentAction;
+use App\Http\Requests\ChirpRequest;
 use App\Models\Chirp;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class ChirpController extends Controller
 {
     use AuthorizesRequests;
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $chirps = Chirp::with(['user', 'attachments'])
+        $chirps = Chirp::with(['user', 'attachments', 'likes'])
             ->latest()
             ->paginate(5);
 
         return view('home', ['chirps' => $chirps]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @throws Throwable
      */
-    public function store(Request $request)
+    public function store(ChirpRequest $request, StoreChirpAttachmentAction $attachmentAction)
     {
-        // Validate the request
-        $validated = $request->validate([
-            'message' => 'required|string|max:255',
-            'attachment' => 'nullable|file|max:2048|mimes:jpg,webp,jpeg,png,gif,pdf,txt',
-        ], [
-            'message.required' => 'Please write something to chirp!',
-            'message.max' => 'Chirps must be 255 characters or less',
-            'attachment.max' => 'File must be under 2MB',
-            'attachment.mimes' => 'Only images, PDFs and text files are allowed',
-        ]);
+        $validated = $request->validated();
+        $file = $request->file('attachment');
+        $path = null;
 
-        // Create the chirp
-        $chirp = auth()->user()->chirps()->create([
-            'message' => $validated['message'],
-        ]);
+        DB::beginTransaction();
 
-        // Save the attachment if there is one.
-        if ($request->hasFile('attachment')) {
-            $file = $request->file('attachment');
-            $path = $file->store('attachments', 'public');
-
-            $chirp->attachments()->create([
-                'path' => $path,
-                'type' => $file->getClientOriginalExtension(),
+        try {
+            $chirp = auth()->user()->chirps()->create([
+                'message' => $validated['message'],
             ]);
+
+            if ($file) {
+                $path = $attachmentAction->execute($chirp, $file);
+            }
+
+            // throw new \Exception('Forced error to test rollback!');
+
+            DB::commit();
+
+        } catch (Throwable) {
+            DB::rollBack();
+
+            if ($path) {
+                $attachmentAction->delete($path);
+            }
+
+            return redirect('/')
+                ->with('error', 'There was an error uploading your file.')
+                ->withInput();
         }
 
         return redirect('/')->with('success', 'Your chirp has been posted!');
     }
 
-    /*
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Chirp $chirp)
     {
         $this->authorize('update', $chirp);
@@ -83,30 +78,15 @@ class ChirpController extends Controller
         return view('chirps.edit', compact('chirp'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Chirp $chirp)
+    public function update(ChirpRequest $request, Chirp $chirp)
     {
         $this->authorize('update', $chirp);
 
-        // Validate the request
-        $validated = $request->validate([
-            'message' => 'required|string|max:255',
-        ], [
-            'message.required' => 'Please write something to chirp!',
-            'message.max' => 'Chirps must be 255 characters or less'
-        ]);
-
-        // Updated the chirp
-        $chirp->update($validated);
+        $chirp->update($request->validated());
 
         return redirect('/')->with('success', 'Your chirp has been updated!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Chirp $chirp)
     {
         $this->authorize('update', $chirp);
