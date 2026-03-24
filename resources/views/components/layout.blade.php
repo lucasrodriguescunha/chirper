@@ -11,7 +11,8 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css"/>
     <meta property="og:image" content={{ asset('images/og.jpeg') }} />
     <meta property="og:title" content="Chirper"/>
-    <meta property="og:description" content="A demo social media platform highlighting the power and simplicity of Laravel."/>
+    <meta property="og:description"
+          content="A demo social media platform highlighting the power and simplicity of Laravel."/>
     <meta property="og:url" content="https://chirper.laravel.cloud"/>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
@@ -57,15 +58,11 @@
     <div class="navbar-end gap-4 px-4">
         @auth
             <span class="text-sm">{{ auth()->user()->name }}</span>
+            <a href="{{ route('settings.profile.edit') }}" class="btn btn-ghost btn-sm">Profile</a>
             <form method="POST" action="/logout" class="inline">
                 @csrf
                 <button type="submit" class="btn btn-ghost btn-sm">Logout</button>
             </form>
-
-{{--            <form action="/profile">--}}
-{{--               @csrf--}}
-{{--                <button class="btn btn-ghost btn-sm">Profile</button>--}}
-{{--            </form>--}}
         @else
             <a href="/login" class="btn btn-ghost btn-sm">Sign In</a>
             <a href="/register" class="btn btn-primary btn-sm">Sign Up</a>
