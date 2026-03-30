@@ -30,6 +30,13 @@ class LikeController extends Controller
             ]);
         }
 
-        return response()->json(['success' => true]);
+        $chirp->load('likes');
+
+        return response()->json([
+            'success' => true,
+            'likes' => $chirp->likes->where('type', 'like')->count(),
+            'dislikes' => $chirp->likes->where('type', 'dislike')->count(),
+            'userType' => $chirp->likes->where('user_id', $user->id)->first()?->type,
+        ]);
     }
 }

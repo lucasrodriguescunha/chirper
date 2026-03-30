@@ -92,6 +92,7 @@
                         data-type="like"
                     >
                         <x-feathericon-heart class="w-5 h-5"/>
+                        <span>{{ $chirp->likes->where('type', 'like')->count() }}</span>
                     </button>
 
                     <button
@@ -100,6 +101,7 @@
                         data-type="dislike"
                     >
                         <x-ri-thumb-down-line class="w-5 h-5"/>
+                        <span>{{ $chirp->likes->where('type', 'dislike')->count() }}</span>
                     </button>
                 </div>
             </div>

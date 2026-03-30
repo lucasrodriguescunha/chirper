@@ -16,23 +16,31 @@ document.addEventListener('DOMContentLoaded', () => {
                             .querySelector('meta[name="csrf-token"]')
                             .getAttribute('content')
                     },
-                    body: JSON.stringify({type})
+                    body: JSON.stringify({ type })
                 });
 
                 if (response.ok) {
+                    const data = await response.json();
+
                     const allButtons = document.querySelectorAll(
                         `.reaction-button[data-chirp-id="${chirpId}"]`
                     );
 
-                    const isActive = btn.classList.contains('text-red-600');
-
                     allButtons.forEach(b => b.classList.remove('text-red-600'));
 
-                    if (!isActive) {
-                        btn.classList.add('text-red-600');
+                    if (data.userType) {
+                        const activeBtn = document.querySelector(
+                            `.reaction-button[data-chirp-id="${chirpId}"][data-type="${data.userType}"]`
+                        );
+                        activeBtn?.classList.add('text-red-600');
                     }
-                }
 
+                    allButtons.forEach(b => {
+                        const span = b.querySelector('span');
+                        if (b.dataset.type === 'like') span.textContent = data.likes;
+                        if (b.dataset.type === 'dislike') span.textContent = data.dislikes;
+                    });
+                }
             } catch (err) {
                 console.error(err);
             }
