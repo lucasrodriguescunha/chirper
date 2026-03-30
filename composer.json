@@ -16,6 +16,7 @@
         "codeat3/blade-akar-icons": "^1.25",
         "codeat3/blade-carbon-icons": "^2.38",
         "codeat3/blade-iconpark": "*",
+        "faisal50x/blade-ionicons": "^1.1",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "owenvoke/blade-fontawesome": "*"

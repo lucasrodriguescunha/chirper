@@ -7,6 +7,7 @@
         <div class="hero-content flex-col">
             <div class="card w-96 bg-base-100">
                 <div class="card-body">
+
                     <h1 class="text-xl mt-1 font-bold text-center mb-6">Welcome Back</h1>
 
                     <form method="POST" action="/login">
@@ -59,10 +60,18 @@
                     </form>
 
                     <div class="divider">OR</div>
-                    <p class="text-center text-sm">
-                        Don't have an account?
-                        <a href="/register" class="link link-primary">Register</a>
-                    </p>
+
+                    <div class="text-center text-sm space-y-2">
+                        <p>
+                            Don't have an account?
+                            <a href="/register" class="link link-primary">Register</a>
+                        </p>
+
+                        <p>
+                            Forgot your password?
+                            <a href="/forgot-password" class="link link-primary">Recover</a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

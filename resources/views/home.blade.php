@@ -26,7 +26,22 @@
                     </div>
 
                     <div class="mt-4 flex items-center justify-end gap-2">
-                        <input type="file" name="attachment" class="file-input file-input-sm"/>
+                        <input
+                            type="file"
+                            name="attachment"
+                            id="attachment-input"
+                            class="hidden"
+                        />
+
+                        <span id="file-name" class="text-sm text-base-content/60 max-w-[150px] truncate hidden"></span>
+
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-ghost"
+                            onclick="document.getElementById('attachment-input').click()"
+                        >
+                            <x-ionicon-add-outline class="w-5 h-5"/>
+                        </button>
 
                         @error('attachment')
                         <div class="label">
@@ -34,10 +49,7 @@
                         </div>
                         @enderror
 
-                        <button
-                            type="submit"
-                            class="btn btn-primary btn-sm"
-                        >
+                        <button type="submit" class="btn btn-primary btn-sm">
                             <x-carbon-send class="w-5 h-5"/>
                         </button>
                     </div>

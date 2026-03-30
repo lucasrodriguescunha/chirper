@@ -20,7 +20,7 @@
     <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96x96.png') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/userReaction.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/userReaction.js', 'resources/js/sendChirpAttachment.js'])
 </head>
 
 <body class="min-h-screen flex flex-col
