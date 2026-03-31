@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             .querySelector('meta[name="csrf-token"]')
                             .getAttribute('content')
                     },
-                    body: JSON.stringify({ type })
+                    body: JSON.stringify({type})
                 });
 
                 if (response.ok) {
@@ -28,9 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     allButtons.forEach(b => b.classList.remove('text-red-600'));
 
-                    if (data.userType) {
+                    if (data.currentUserReaction) {
                         const activeBtn = document.querySelector(
-                            `.reaction-button[data-chirp-id="${chirpId}"][data-type="${data.userType}"]`
+                            `.reaction-button[data-chirp-id="${chirpId}"][data-type="${data.currentUserReaction}"]`
                         );
                         activeBtn?.classList.add('text-red-600');
                     }
