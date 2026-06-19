@@ -79,7 +79,7 @@
                         <div class="form-control mt-8">
                             <button
                                 type="submit"
-                                class="btn btn-primary btn-sm w-full"
+                                class="btn btn-primary w-full"
                             >
                                 Register
                             </button>

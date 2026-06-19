@@ -89,8 +89,8 @@
                     </div>
 
                     <div class="card-actions justify-between mt-4">
-                        <a href="/" class="btn btn-ghost btn-sm">Cancel</a>
-                        <button type="submit" class="btn btn-primary btn-sm">
+                        <a href="/" class="btn btn-ghost">Cancel</a>
+                        <button type="submit" class="btn btn-primary">
                             Save Changes
                         </button>
                     </div>

@@ -23,12 +23,12 @@
                                         <form method="POST" action="{{ route('follows.destroy', $user) }}">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-ghost btn-sm">Unfollow</button>
+                                            <button type="submit" class="btn btn-ghost">Unfollow</button>
                                         </form>
                                     @else
                                         <form method="POST" action="{{ route('follows.store', $user) }}">
                                             @csrf
-                                            <button type="submit" class="btn btn-primary btn-sm">Follow</button>
+                                            <button type="submit" class="btn btn-primary">Follow</button>
                                         </form>
                                     @endif
                                 @endif

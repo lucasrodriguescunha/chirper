@@ -42,7 +42,7 @@
                         </div>
                         @enderror
 
-                        <button class="btn btn-primary btn-sm w-full">
+                        <button class="btn btn-primary w-full">
                             Send reset link
                         </button>
                     </form>

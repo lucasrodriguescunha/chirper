@@ -38,7 +38,7 @@
 
                         <button
                             type="button"
-                            class="btn btn-sm btn-ghost"
+                            class="btn btn-ghost"
                             onclick="document.getElementById('attachment-input').click()"
                         >
                             <x-ionicon-add-outline class="w-5 h-5"/>
@@ -50,7 +50,7 @@
                         </div>
                         @enderror
 
-                        <button type="submit" class="btn btn-primary btn-sm">
+                        <button type="submit" class="btn btn-primary">
                             <x-carbon-send class="w-5 h-5"/>
                         </button>
                     </div>

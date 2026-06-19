@@ -52,7 +52,7 @@
 
                     @can('update', $chirp)
                         <div class="flex gap-1">
-                            <a href="/chirps/{{ $chirp->id }}/edit" class="btn btn-ghost btn-xs">
+                            <a href="/chirps/{{ $chirp->id }}/edit" class="btn btn-ghost">
                                 Edit
                             </a>
 
@@ -62,7 +62,7 @@
                                 <button
                                     type="submit"
                                     onclick="return confirm('Are you sure you want to delete this chirp?')"
-                                    class="btn btn-ghost btn-xs text-error"
+                                    class="btn btn-ghost text-error"
                                 >
                                     Delete
                                 </button>

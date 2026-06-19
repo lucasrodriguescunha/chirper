@@ -22,7 +22,7 @@
                         @csrf
                         <button
                             type="submit"
-                            class="btn btn-primary btn-sm w-full"
+                            class="btn btn-primary w-full"
                         >
                             Forward email
                         </button>
@@ -32,7 +32,7 @@
                         @csrf
                         <button
                             type="submit"
-                            class="btn btn-ghost btn-sm w-full"
+                            class="btn btn-ghost w-full"
                         >
                             Logout
                         </button>

@@ -45,8 +45,8 @@
                         class="textarea textarea-bordered w-full"
                     >{{ $comment->body }}</textarea>
                     <div class="flex justify-end gap-2 mt-1">
-                        <button type="button" class="btn btn-ghost btn-sm" data-comment-edit-cancel>Cancel</button>
-                        <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                        <button type="button" class="btn btn-ghost" data-comment-edit-cancel>Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
             @endif
@@ -75,11 +75,11 @@
 
         @if (auth()->id() === $comment->user_id)
             <div class="flex flex-col mt-1">
-                <button type="button" class="btn btn-ghost btn-xs" data-comment-edit-toggle>✎</button>
+                <button type="button" class="btn btn-ghost" data-comment-edit-toggle>✎</button>
                 <form method="POST" action="/chirps/{{ $chirp->id }}/comments/{{ $comment->id }}">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-ghost btn-xs text-error">✕</button>
+                    <button type="submit" class="btn btn-ghost text-error">✕</button>
                 </form>
             </div>
         @endif
