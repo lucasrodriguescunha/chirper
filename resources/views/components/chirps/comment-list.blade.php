@@ -42,11 +42,11 @@
                         rows="2"
                         maxlength="255"
                         data-counter
-                        class="textarea textarea-bordered textarea-sm w-full"
+                        class="textarea textarea-bordered w-full"
                     >{{ $comment->body }}</textarea>
                     <div class="flex justify-end gap-2 mt-1">
-                        <button type="button" class="btn btn-ghost btn-xs" data-comment-edit-cancel>Cancel</button>
-                        <button type="submit" class="btn btn-primary btn-xs">Save</button>
+                        <button type="button" class="btn btn-ghost btn-sm" data-comment-edit-cancel>Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Save</button>
                     </div>
                 </form>
             @endif

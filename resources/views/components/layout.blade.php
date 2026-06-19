@@ -74,7 +74,7 @@
                     name="q"
                     value="{{ request('q') }}"
                     placeholder="Search..."
-                    class="input input-bordered input-sm w-48"
+                    class="input input-bordered w-48"
                 />
             </form>
         @endauth

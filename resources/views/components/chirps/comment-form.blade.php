@@ -11,9 +11,9 @@
                 maxlength="255"
                 data-counter
                 required
-                class="input input-bordered input-sm flex-1"
+                class="input input-bordered flex-1"
             />
-            <button type="submit" class="btn btn-sm btn-primary">
+            <button type="submit" class="btn btn-primary">
                 Send
             </button>
         </div>

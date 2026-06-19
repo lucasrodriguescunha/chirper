@@ -13,10 +13,10 @@
                     name="q"
                     value="{{ $q }}"
                     placeholder="Search chirps and users..."
-                    class="input input-bordered input-sm flex-1"
+                    class="input input-bordered flex-1"
                     autofocus
                 />
-                <button type="submit" class="btn btn-primary btn-sm">Search</button>
+                <button type="submit" class="btn btn-primary">Search</button>
             </div>
         </form>
 
