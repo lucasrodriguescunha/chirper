@@ -7,7 +7,7 @@
             : null;
     @endphp
 
-    <div class="flex items-start gap-2 mb-2">
+    <div class="flex items-start gap-2 mb-2" data-comment="{{ $comment->id }}">
         <img
             src="{{ $comment->user->avatarUrl() }}"
             class="size-7 rounded-full"
@@ -16,7 +16,7 @@
         <div class="flex-1 bg-base-200 rounded-lg px-3 py-2 text-sm">
             <span class="font-semibold">{{ $comment->user->name }}</span>
 
-            @if ($chirp->updated_at->gt($chirp->created_at->addSeconds(5)))
+            @if ($comment->updated_at->gt($comment->created_at->addSeconds(5)))
                 <span class="text-xs text-base-content/60 italic">
                     Edited {{ $comment->updated_at->diffForHumans() }}
                 </span>
@@ -26,10 +26,32 @@
                 </span>
             @endif
 
-            <p class="mt-0.5">{{ $comment->body }}</p>
+            <p class="mt-0.5" data-comment-body>{{ $comment->body }}</p>
 
+            @if (auth()->id() === $comment->user_id)
+                <form
+                    method="POST"
+                    action="/chirps/{{ $chirp->id }}/comments/{{ $comment->id }}"
+                    class="mt-2 hidden form-control"
+                    data-comment-edit-form
+                >
+                    @csrf
+                    @method('PUT')
+                    <textarea
+                        name="body"
+                        rows="2"
+                        maxlength="255"
+                        data-counter
+                        class="textarea textarea-bordered textarea-sm w-full"
+                    >{{ $comment->body }}</textarea>
+                    <div class="flex justify-end gap-2 mt-1">
+                        <button type="button" class="btn btn-ghost btn-xs" data-comment-edit-cancel>Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-xs">Save</button>
+                    </div>
+                </form>
+            @endif
 
-            {{-- Reações do comentário --}}
+            {{-- Comment reactions --}}
             <div class="flex items-center gap-3 mt-2">
                 <button
                     class="comment-reaction-button hover:scale-110 transition {{ $userReaction === 'like' ? 'text-red-600' : '' }}"
@@ -52,11 +74,14 @@
         </div>
 
         @if (auth()->id() === $comment->user_id)
-            <form method="POST" action="/chirps/{{ $chirp->id }}/comments/{{ $comment->id }}">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-ghost btn-xs text-error mt-1">✕</button>
-            </form>
+            <div class="flex flex-col mt-1">
+                <button type="button" class="btn btn-ghost btn-xs" data-comment-edit-toggle>✎</button>
+                <form method="POST" action="/chirps/{{ $chirp->id }}/comments/{{ $comment->id }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-ghost btn-xs text-error">✕</button>
+                </form>
+            </div>
         @endif
     </div>
 @endforeach

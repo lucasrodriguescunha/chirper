@@ -7,6 +7,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/chirps/{chirp}/comments', [CommentController::class, 'store'])
         ->name('comments.store');
 
+    Route::put('/chirps/{chirp}/comments/{comment}', [CommentController::class, 'update'])
+        ->name('comments.update');
+
     Route::delete('/chirps/{chirp}/comments/{comment}', [CommentController::class, 'destroy'])
         ->name('comments.destroy');
 

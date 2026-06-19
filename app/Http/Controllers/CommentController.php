@@ -18,6 +18,15 @@ class CommentController extends Controller
         return back()->with('success', 'Comment posted!');
     }
 
+    public function update(CommentRequest $request, Chirp $chirp, Comment $comment)
+    {
+        abort_if($comment->user_id !== auth()->id(), 403);
+
+        $comment->update(['body' => $request->validated()['body']]);
+
+        return back()->with('success', 'Comment updated!');
+    }
+
     public function destroy(Chirp $chirp, Comment $comment)
     {
         abort_if($comment->user_id !== auth()->id(), 403);

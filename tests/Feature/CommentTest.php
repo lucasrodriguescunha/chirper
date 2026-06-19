@@ -69,3 +69,54 @@ it('forbids non-owner from deleting a comment', function () {
     $response->assertForbidden();
     expect(Comment::find($comment->id))->not->toBeNull();
 });
+
+it('lets the owner update their comment', function () {
+    $comment = Comment::factory()
+        ->for($this->user)
+        ->for($this->chirp)
+        ->create(['body' => 'old text']);
+
+    $response = $this->actingAs($this->user)
+        ->put("/chirps/{$this->chirp->id}/comments/{$comment->id}", ['body' => 'new text']);
+
+    $response->assertRedirect();
+    expect($comment->fresh()->body)->toBe('new text');
+});
+
+it('forbids non-owner from updating a comment', function () {
+    $comment = Comment::factory()
+        ->for($this->chirp)
+        ->create(['body' => 'original']);
+
+    $response = $this->actingAs($this->user)
+        ->put("/chirps/{$this->chirp->id}/comments/{$comment->id}", ['body' => 'hacked']);
+
+    $response->assertForbidden();
+    expect($comment->fresh()->body)->toBe('original');
+});
+
+it('validates body when updating a comment', function () {
+    $comment = Comment::factory()
+        ->for($this->user)
+        ->for($this->chirp)
+        ->create();
+
+    $response = $this->actingAs($this->user)
+        ->put("/chirps/{$this->chirp->id}/comments/{$comment->id}", ['body' => '']);
+
+    $response->assertSessionHasErrors('body');
+});
+
+it('rejects update body longer than 255 chars', function () {
+    $comment = Comment::factory()
+        ->for($this->user)
+        ->for($this->chirp)
+        ->create();
+
+    $response = $this->actingAs($this->user)->put(
+        "/chirps/{$this->chirp->id}/comments/{$comment->id}",
+        ['body' => str_repeat('x', 256)]
+    );
+
+    $response->assertSessionHasErrors('body');
+});
