@@ -65,6 +65,7 @@
                             name="bio"
                             rows="3"
                             maxlength="255"
+                            data-counter
                             class="textarea textarea-bordered w-full @error('bio') textarea-error @enderror"
                             placeholder="Tell people about yourself"
                         >{{ old('bio', $user->bio) }}</textarea>

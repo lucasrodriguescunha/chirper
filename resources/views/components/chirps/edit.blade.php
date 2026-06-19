@@ -18,6 +18,7 @@
                             class="textarea textarea-bordered w-full resize-none @error('message') textarea-error @enderror"
                             rows="4"
                             maxlength="255"
+                            data-counter
                         >{{ old('message', $chirp->message) }}</textarea>
 
                         @error('message')
