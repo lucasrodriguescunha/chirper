@@ -25,7 +25,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'avatar'
+        'avatar',
+        'bio',
     ];
 
     public function avatarUrl(): string

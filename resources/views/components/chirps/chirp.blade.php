@@ -29,9 +29,13 @@
             <div class="min-w-0 flex-1">
                 <div class="flex justify-between w-full">
                     <div class="flex items-center space-x-1">
-                        <span class="text-sm font-semibold">
-                            {{ $chirp->user ? $chirp->user->name : 'Anonymous' }}
-                        </span>
+                        @if ($chirp->user)
+                            <a href="{{ route('users.show', $chirp->user) }}" class="text-sm font-semibold hover:underline">
+                                {{ $chirp->user->name }}
+                            </a>
+                        @else
+                            <span class="text-sm font-semibold">Anonymous</span>
+                        @endif
 
                         @auth
                             @if ($chirp->user && $chirp->user->id !== auth()->id())

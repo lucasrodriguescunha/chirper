@@ -16,7 +16,10 @@ class ProfileController extends Controller
     public function update(ProfileRequest $request)
     {
         $user = auth()->user();
-        $data = ['name' => $request->validated('name')];
+        $data = [
+            'name' => $request->validated('name'),
+            'bio' => $request->validated('bio'),
+        ];
 
         if ($request->hasFile('avatar')) {
             if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {

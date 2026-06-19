@@ -11,6 +11,7 @@ require __DIR__ . '/chirps.php';
 require __DIR__ . '/verification.php';
 require __DIR__ . '/comments.php';
 require __DIR__ . '/follows.php';
+require __DIR__ . '/users.php';
 
 
 

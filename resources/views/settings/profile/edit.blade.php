@@ -59,6 +59,24 @@
 
                     <div class="form-control w-full mb-4">
                         <label class="label">
+                            <span class="label-text">Bio</span>
+                        </label>
+                        <textarea
+                            name="bio"
+                            rows="3"
+                            maxlength="255"
+                            class="textarea textarea-bordered w-full @error('bio') textarea-error @enderror"
+                            placeholder="Tell people about yourself"
+                        >{{ old('bio', $user->bio) }}</textarea>
+                        @error('bio')
+                        <div class="label">
+                            <span class="label-text-alt text-error">{{ $message }}</span>
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="form-control w-full mb-4">
+                        <label class="label">
                             <span class="label-text">Email</span>
                         </label>
                         <input
