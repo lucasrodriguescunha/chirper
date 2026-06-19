@@ -18,9 +18,8 @@
                                 <img src="{{ $user->avatarUrl() }}" alt="Your avatar"/>
                             </div>
                         </div>
-                        <span class="text-sm text-base-content/60">Current avatar</span>
-                        <span class="text-sm text-base-content/60">Seguindo: </span>
-                        <span class="text-sm text-base-content/60">Seguidores: </span>
+                        <span class="text-sm text-base-content/60">Following: {{ $user->following()->count() }}</span>
+                        <span class="text-sm text-base-content/60">Followers: {{ $user->followers()->count() }}</span>
                     </div>
 
                     <div class="form-control w-full mb-4">

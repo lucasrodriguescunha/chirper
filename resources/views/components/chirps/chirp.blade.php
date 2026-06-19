@@ -33,6 +33,23 @@
                             {{ $chirp->user ? $chirp->user->name : 'Anonymous' }}
                         </span>
 
+                        @auth
+                            @if ($chirp->user && $chirp->user->id !== auth()->id())
+                                @if (auth()->user()->isFollowing($chirp->user))
+                                    <form method="POST" action="{{ route('follows.destroy', $chirp->user) }}" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-ghost btn-xs">Unfollow</button>
+                                    </form>
+                                @else
+                                    <form method="POST" action="{{ route('follows.store', $chirp->user) }}" class="inline">
+                                        @csrf
+                                        <button type="submit" class="btn btn-primary btn-xs">Follow</button>
+                                    </form>
+                                @endif
+                            @endif
+                        @endauth
+
                         <span class="text-base-content/60">•</span>
 
                         @if ($chirp->updated_at->gt($chirp->created_at->addSeconds(5)))
