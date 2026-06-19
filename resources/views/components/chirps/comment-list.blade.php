@@ -10,10 +10,10 @@
     <div class="flex items-start gap-2 mb-2" data-comment="{{ $comment->id }}">
         <img
             src="{{ $comment->user->avatarUrl() }}"
-            class="size-7 rounded-full"
+            class="size-7 rounded-full shrink-0"
             alt="{{ $comment->user->name }}"
         />
-        <div class="flex-1 bg-base-200 rounded-lg px-3 py-2 text-sm">
+        <div class="flex-1 min-w-0 bg-base-200 rounded-lg px-3 py-2 text-sm break-words">
             <span class="font-semibold">{{ $comment->user->name }}</span>
 
             @if ($comment->updated_at->gt($comment->created_at->addSeconds(5)))

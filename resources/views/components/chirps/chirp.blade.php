@@ -71,7 +71,7 @@
                     @endcan
                 </div>
 
-                <p class="mt-1">
+                <p class="mt-1 break-words">
                     {{ $chirp->message }}
                 </p>
 
