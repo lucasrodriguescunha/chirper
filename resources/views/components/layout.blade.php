@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ isset($title) ? $title . ' - Chirper' : 'Chirper' }}</title>
+    <title>{{ isset($title) ? $title . ' - Chirper Together' : 'Chirper Together' }}</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css"/>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css"/>
     <meta property="og:image" content={{ asset('images/og.jpeg') }} />
-    <meta property="og:title" content="Chirper"/>
+    <meta property="og:title" content="Chirper Together"/>
     <meta property="og:description"
           content="A demo social media platform highlighting the power and simplicity of Laravel."/>
     <meta property="og:url" content="https://chirper.laravel.cloud"/>
@@ -104,7 +104,7 @@
 
 <footer class="footer footer-center p-5 bg-base-300 text-base-content text-xs">
     <div>
-        &copy; 2025 Chirper - Built with Laravel ❤️
+        &copy; 2025 Chirper Together - Built with Laravel ❤️
     </div>
 </footer>
 </body>

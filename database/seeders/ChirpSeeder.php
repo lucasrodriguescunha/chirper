@@ -36,7 +36,7 @@ class ChirpSeeder extends Seeder
         // Sample chirps
         $chirps = [
             'Just discovered Laravel — where has this been all my life? 🚀',
-            'Building something cool with Chirper today!',
+            'Building something cool with Chirper Together today!',
             "Laravel's Eloquent ORM is pure magic ✨",
             'Deployed my first app with Laravel Cloud. So smooth!',
             'Who else loves Blade components?',
