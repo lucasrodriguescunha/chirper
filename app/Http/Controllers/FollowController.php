@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Notifications\NewFollowerNotification;
 
 class FollowController extends Controller
 {
@@ -10,7 +11,11 @@ class FollowController extends Controller
     {
         abort_if($user->id === auth()->id(), 403, 'You cannot follow yourself.');
 
-        auth()->user()->following()->syncWithoutDetaching([$user->id]);
+        $changes = auth()->user()->following()->syncWithoutDetaching([$user->id]);
+
+        if (!empty($changes['attached'])) {
+            $user->notify(new NewFollowerNotification(auth()->user()));
+        }
 
         return back()->with('success', "You are now following {$user->name}.");
     }
