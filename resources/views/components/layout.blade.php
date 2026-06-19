@@ -2,6 +2,17 @@
 <html lang="en" data-theme="laravelChirper">
 
 <head>
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem('theme');
+                if (t !== 'laravelChirper' && t !== 'laravelChirperDark') {
+                    t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'laravelChirperDark' : 'laravelChirper';
+                }
+                document.documentElement.setAttribute('data-theme', t);
+            } catch (e) {}
+        })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ isset($title) ? $title . ' - Chirper Together' : 'Chirper Together' }}</title>
@@ -56,6 +67,14 @@
         </a>
     </div>
     <div class="navbar-end gap-4 px-4">
+        <button type="button" id="theme-toggle" class="btn btn-ghost btn-sm" aria-label="Toggle theme" title="Toggle theme">
+            <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0-1.414-1.414M7.05 7.05 5.636 5.636M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/>
+            </svg>
+            <svg id="theme-icon-moon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>
+            </svg>
+        </button>
         @auth
             <span class="text-sm">{{ auth()->user()->name }}</span>
             <a href="{{ route('settings.profile.edit') }}" class="btn btn-ghost btn-sm">Profile</a>
@@ -101,6 +120,29 @@
 <main class="flex-1 container mx-auto px-4 py-8">
     {{ $slot }}
 </main>
+
+<script>
+    (function () {
+        var btn = document.getElementById('theme-toggle');
+        if (!btn) return;
+        var sun = document.getElementById('theme-icon-sun');
+        var moon = document.getElementById('theme-icon-moon');
+        function sync() {
+            var t = document.documentElement.getAttribute('data-theme');
+            var dark = t === 'laravelChirperDark';
+            sun.classList.toggle('hidden', !dark);
+            moon.classList.toggle('hidden', dark);
+        }
+        sync();
+        btn.addEventListener('click', function () {
+            var cur = document.documentElement.getAttribute('data-theme');
+            var next = cur === 'laravelChirperDark' ? 'laravelChirper' : 'laravelChirperDark';
+            document.documentElement.setAttribute('data-theme', next);
+            try { localStorage.setItem('theme', next); } catch (e) {}
+            sync();
+        });
+    })();
+</script>
 
 <footer class="footer footer-center p-5 bg-base-300 text-base-content text-xs">
     <div>
