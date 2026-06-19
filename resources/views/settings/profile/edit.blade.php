@@ -12,17 +12,17 @@
                     @csrf
                     @method('PATCH')
 
-                    {{-- Avatar atual --}}
                     <div class="flex items-center gap-4 mb-6">
                         <div class="avatar">
                             <div class="size-16 rounded-full">
-                                <img src="{{ $user->avatarUrl() }}" alt="Your avatar" />
+                                <img src="{{ $user->avatarUrl() }}" alt="Your avatar"/>
                             </div>
                         </div>
                         <span class="text-sm text-base-content/60">Current avatar</span>
+                        <span class="text-sm text-base-content/60">Seguindo: </span>
+                        <span class="text-sm text-base-content/60">Seguidores: </span>
                     </div>
 
-                    {{-- Upload de avatar --}}
                     <div class="form-control w-full mb-4">
                         <label class="label">
                             <span class="label-text">Avatar</span>
@@ -40,7 +40,6 @@
                         @enderror
                     </div>
 
-                    {{-- Nome --}}
                     <div class="form-control w-full mb-4">
                         <label class="label">
                             <span class="label-text">Name</span>
@@ -59,7 +58,6 @@
                         @enderror
                     </div>
 
-                    {{-- Email (somente leitura) --}}
                     <div class="form-control w-full mb-4">
                         <label class="label">
                             <span class="label-text">Email</span>
