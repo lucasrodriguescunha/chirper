@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Like extends Model
+class Comment extends Model
 {
-    protected $fillable = ['user_id', 'chirp_id', 'type'];
+    protected $fillable = ['chirp_id', 'user_id', 'body'];
 
     public function user(): BelongsTo
     {
@@ -19,8 +20,8 @@ class Like extends Model
         return $this->belongsTo(Chirp::class);
     }
 
-    public function comment(): BelongsTo
+    public function likes(): HasMany
     {
-        return $this->belongsTo(Comment::class);
+        return $this->hasMany(Like::class);
     }
 }

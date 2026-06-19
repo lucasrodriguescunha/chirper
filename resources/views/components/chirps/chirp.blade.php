@@ -104,6 +104,8 @@
                         <span>{{ $chirp->likes->where('type', 'dislike')->count() }}</span>
                     </button>
                 </div>
+
+                <x-chirps.comments :chirp="$chirp" />
             </div>
         </div>
     </div>

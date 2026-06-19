@@ -34,4 +34,9 @@ class Chirp extends Model
     {
         return $this->hasOne(ChirpAttachment::class);
     }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

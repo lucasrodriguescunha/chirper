@@ -15,15 +15,8 @@ class ChirpController extends Controller
 
     public function index()
     {
-        $chirps = Chirp::with(['user', 'attachments', 'likes'])
-            ->withCount([
-                'likes as likes_count' => function ($query) {
-                    $query->where('type', 'like');
-                },
-                'likes as dislikes_count' => function ($query) {
-                    $query->where('type', 'dislike');
-                }
-            ])->latest()
+        $chirps = Chirp::with(['user', 'attachments', 'likes', 'comments.user', 'comments.likes'])
+            ->latest()
             ->paginate(5);
 
         return view('home', ['chirps' => $chirps]);
@@ -81,7 +74,7 @@ class ChirpController extends Controller
     {
         $this->authorize('update', $chirp);
 
-        return view('chirps.edit', compact('chirp'));
+        return view('components.chirps.edit', compact('chirp'));
     }
 
     public function update(ChirpRequest $request, Chirp $chirp)
