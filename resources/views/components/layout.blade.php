@@ -67,6 +67,17 @@
         </a>
     </div>
     <div class="navbar-end gap-4 px-4">
+        @auth
+            <form method="GET" action="{{ route('search') }}" class="hidden sm:block">
+                <input
+                    type="search"
+                    name="q"
+                    value="{{ request('q') }}"
+                    placeholder="Search..."
+                    class="input input-bordered input-sm w-48"
+                />
+            </form>
+        @endauth
         <button type="button" id="theme-toggle" class="btn btn-ghost btn-sm" aria-label="Toggle theme" title="Toggle theme">
             <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0-1.414-1.414M7.05 7.05 5.636 5.636M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/>
