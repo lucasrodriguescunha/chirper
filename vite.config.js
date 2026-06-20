@@ -12,6 +12,7 @@ export default defineConfig({
                 'resources/js/sendChirpAttachment.js',
                 'resources/js/charCounter.js',
                 'resources/js/commentEdit.js',
+                'resources/js/commandPalette.js',
             ],
             refresh: true,
         }),
