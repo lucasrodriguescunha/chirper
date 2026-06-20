@@ -1,5 +1,15 @@
 # Chirper Together
 
+![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-8.2%2B-777BB4?logo=php&logoColor=white)
+![Blade](https://img.shields.io/badge/Blade-Components-F05340?logo=laravel&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-38B2AC?logo=tailwindcss&logoColor=white)
+![DaisyUI](https://img.shields.io/badge/DaisyUI-5-5A0EF8?logo=daisyui&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-default-003B57?logo=sqlite&logoColor=white)
+![Pest](https://img.shields.io/badge/Pest-4-8B5CF6?logo=php&logoColor=white)
+![Playwright](https://img.shields.io/badge/Playwright-E2E-2EAD33?logo=playwright&logoColor=white)
+
 Twitter-style social mini-network built with Laravel 12. Users post short chirps, follow each other, comment, react with like/dislike, and get notified when others interact with their content.
 
 ## Stack
@@ -39,7 +49,8 @@ resources/
 routes/                  Split per resource: web, auth, chirps, comments, follows,
                          users, search, notifications, password, profile, verification
 tests/Feature/           Pest feature tests (auth, chirps, comments, follows, ...)
-tests/e2e/               Playwright specs
+tests/e2e/               Playwright specs + global-setup + helpers
+app/Console/Commands/    E2eResetCommand (php artisan e2e:reset)
 ```
 
 ## Setup
@@ -78,8 +89,28 @@ composer test
 E2E tests (Playwright):
 
 ```bash
-npm run test:e2e
+npm run test:e2e            # headless, record video per test
+npm run test:e2e:headed     # watch the browser drive itself
+npm run test:e2e:ui         # interactive UI mode (best for debugging)
+npm run test:e2e:codegen    # record clicks and emit a new spec
 ```
+
+The Playwright config auto-starts `php artisan serve --port=8000`. A
+`globalSetup` hook builds Vite assets (when missing) and runs `php artisan
+e2e:reset` to drop the database and seed two verified users
+(`alice@e2e.test` / `bob@e2e.test`, password `password123`) plus baseline
+chirps. A per-test fixture re-seeds before every spec so tests never
+collide on shared state.
+
+Videos and traces land under `test-results/<test-name>/`. The HTML
+report is available with:
+
+```bash
+npx playwright show-report
+```
+
+Suites cover auth, chirps CRUD + reactions, comments CRUD + reactions,
+follow/unfollow, navbar and dedicated search, and profile editing.
 
 ## Notifications
 
