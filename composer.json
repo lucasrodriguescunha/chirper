@@ -19,7 +19,8 @@
         "faisal50x/blade-ionicons": "^1.1",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
-        "owenvoke/blade-fontawesome": "*"
+        "owenvoke/blade-fontawesome": "*",
+        "resend/resend-laravel": "^1.4"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
