@@ -10,11 +10,25 @@ beforeEach(function () {
 it('lists chirps on the home page', function () {
     Chirp::factory()->count(3)->create();
 
-    $response = $this->get('/');
+    $response = $this->actingAs($this->user)->get('/');
 
     $response->assertOk();
     $response->assertViewIs('home');
     $response->assertViewHas('chirps');
+});
+
+it('redirects guests from the home page to login', function () {
+    $response = $this->get('/');
+
+    $response->assertRedirect('/login');
+});
+
+it('redirects unverified users from the home page to verification notice', function () {
+    $unverified = User::factory()->unverified()->create();
+
+    $response = $this->actingAs($unverified)->get('/');
+
+    $response->assertRedirect(route('verification.notice'));
 });
 
 it('requires auth to store a chirp', function () {
