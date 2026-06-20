@@ -66,15 +66,17 @@
     </div>
     <div class="navbar-end gap-4 px-4">
         @auth
-            <form method="GET" action="{{ route('search') }}" class="hidden sm:block">
-                <input
-                    type="search"
-                    name="q"
-                    value="{{ request('q') }}"
-                    placeholder="Search..."
-                    class="input input-bordered w-48"
-                />
-            </form>
+            @if (auth()->user()->hasVerifiedEmail())
+                <form method="GET" action="{{ route('search') }}" class="hidden sm:block">
+                    <input
+                        type="search"
+                        name="q"
+                        value="{{ request('q') }}"
+                        placeholder="Search..."
+                        class="input input-bordered w-48"
+                    />
+                </form>
+            @endif
         @endauth
         <button type="button" id="theme-toggle" class="btn btn-ghost" aria-label="Toggle theme" title="Toggle theme">
             <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -85,21 +87,43 @@
             </svg>
         </button>
         @auth
-            @php($__unreadNotifications = auth()->user()->unreadNotifications()->count())
-            <a href="{{ route('notifications.index') }}" class="btn btn-ghost relative" aria-label="Notifications" title="Notifications">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-                </svg>
-                @if ($__unreadNotifications > 0)
-                    <span class="badge badge-error badge-sm absolute -top-1 -right-1">{{ $__unreadNotifications > 99 ? '99+' : $__unreadNotifications }}</span>
-                @endif
-            </a>
-            <span class="text-sm">{{ auth()->user()->name }}</span>
-            <a href="{{ route('settings.profile.edit') }}" class="btn btn-ghost">Profile</a>
-            <form method="POST" action="/logout" class="inline">
-                @csrf
-                <button type="submit" class="btn btn-ghost">Logout</button>
-            </form>
+            @if (auth()->user()->hasVerifiedEmail())
+                @php($__unreadNotifications = auth()->user()->unreadNotifications()->count())
+                <a href="{{ route('notifications.index') }}" class="btn btn-ghost relative" aria-label="Notifications" title="Notifications">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    </svg>
+                    @if ($__unreadNotifications > 0)
+                        <span class="badge badge-error badge-sm absolute -top-1 -right-1">{{ $__unreadNotifications > 99 ? '99+' : $__unreadNotifications }}</span>
+                    @endif
+                </a>
+            @endif
+            <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="btn btn-ghost gap-2 px-2" aria-label="Account menu">
+                    <div class="avatar">
+                        <div class="w-8 rounded-full">
+                            <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->name }}" />
+                        </div>
+                    </div>
+                    <span class="hidden sm:inline text-sm">{{ auth()->user()->name }}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <ul tabindex="0" class="dropdown-content menu z-1 mt-3 w-52 rounded-box bg-base-100 p-2 shadow">
+                    @if (auth()->user()->hasVerifiedEmail())
+                        <li><a href="{{ route('settings.profile.edit') }}">Profile</a></li>
+                    @else
+                        <li><a href="{{ route('verification.notice') }}">Verify email</a></li>
+                    @endif
+                    <li>
+                        <form method="POST" action="/logout">
+                            @csrf
+                            <button type="submit" class="text-error">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
         @else
             <a href="/login" class="btn btn-ghost">Sign In</a>
             <a href="/register" class="btn btn-primary">Sign Up</a>
@@ -160,6 +184,7 @@
             sync();
         });
     })();
+
 </script>
 
 <footer class="footer footer-center p-5 bg-base-300 text-base-content text-xs">
