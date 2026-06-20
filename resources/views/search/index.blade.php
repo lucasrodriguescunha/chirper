@@ -53,6 +53,10 @@
                         <x-chirps.chirp :chirp="$chirp"/>
                     @endforeach
                 </div>
+
+                <div class="mt-6">
+                    {{ $chirps->links() }}
+                </div>
             @endif
         @endif
     </div>

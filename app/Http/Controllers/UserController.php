@@ -11,7 +11,8 @@ class UserController extends Controller
         $chirps = $user->chirps()
             ->with(['user', 'attachments', 'likes', 'comments.user', 'comments.likes'])
             ->latest()
-            ->paginate(5);
+            ->paginate(10)
+            ->withQueryString();
 
         return view('users.show', [
             'user' => $user,

@@ -17,7 +17,8 @@ class ChirpController extends Controller
     {
         $chirps = Chirp::with(['user', 'attachments', 'likes', 'comments.user', 'comments.likes'])
             ->latest()
-            ->paginate(5);
+            ->paginate(10)
+            ->withQueryString();
 
         return view('home', ['chirps' => $chirps]);
     }

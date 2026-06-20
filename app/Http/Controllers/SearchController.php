@@ -13,7 +13,7 @@ class SearchController extends Controller
         $q = trim((string) $request->query('q', ''));
 
         $users = collect();
-        $chirps = collect();
+        $chirps = null;
 
         if ($q !== '') {
             $like = '%' . str_replace(['%', '_'], ['\%', '\_'], $q) . '%';
@@ -29,8 +29,8 @@ class SearchController extends Controller
                 ->with(['user', 'attachments', 'likes', 'comments.user', 'comments.likes'])
                 ->where('message', 'like', $like)
                 ->latest()
-                ->limit(20)
-                ->get();
+                ->paginate(10)
+                ->withQueryString();
         }
 
         return view('search.index', [
