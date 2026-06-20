@@ -11,8 +11,11 @@
 ![SQLite](https://img.shields.io/badge/SQLite-default-003B57?logo=sqlite&logoColor=white)
 ![Pest](https://img.shields.io/badge/Pest-4-8B5CF6?logo=php&logoColor=white)
 ![Playwright](https://img.shields.io/badge/Playwright-E2E-2EAD33?logo=playwright&logoColor=white)
+![Laravel Cloud](https://img.shields.io/badge/Deploy-Laravel%20Cloud-FF2D20?logo=laravel&logoColor=white)
 
 Twitter-style social mini-network built with Laravel 12. Users post short chirps, follow each other, comment, react with like/dislike, and get notified when others interact with their content.
+
+Live: [chirper-master-ej8kbb.laravel.cloud](https://chirper-master-ej8kbb.laravel.cloud)
 
 ## Stack
 
@@ -21,6 +24,7 @@ Twitter-style social mini-network built with Laravel 12. Users post short chirps
 - **Database**: SQLite (default), MySQL/PostgreSQL compatible via Eloquent
 - **Testing**: Pest 4 + pest-plugin-laravel; SQLite `:memory:` for fast feature tests
 - **E2E**: Playwright
+- **Deploy**: Laravel Cloud — Flex 256 MiB compute (US East / Ohio), Serverless Postgres 17 (¼ unit), edge network with DDoS protection + CDN + edge caching
 
 ## Features
 
