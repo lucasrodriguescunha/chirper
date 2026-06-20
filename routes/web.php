@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\ChirpController;
 
-Route::get('/', [ChirpController::class, 'index']);
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/', [ChirpController::class, 'index']);
+});
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/password.php';
