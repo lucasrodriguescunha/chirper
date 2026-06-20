@@ -29,7 +29,7 @@
     <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96x96.png') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/userReaction.js', 'resources/js/sendChirpAttachment.js', 'resources/js/charCounter.js', 'resources/js/commentEdit.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/userReaction.js', 'resources/js/sendChirpAttachment.js', 'resources/js/charCounter.js', 'resources/js/commentEdit.js', 'resources/js/commandPalette.js'])
 </head>
 
 <body class="min-h-screen flex flex-col
@@ -67,15 +67,19 @@
     <div class="navbar-end gap-4 px-4">
         @auth
             @if (auth()->user()->hasVerifiedEmail())
-                <form method="GET" action="{{ route('search') }}" class="hidden sm:block">
-                    <input
-                        type="search"
-                        name="q"
-                        value="{{ request('q') }}"
-                        placeholder="Search..."
-                        class="input input-bordered w-48"
-                    />
-                </form>
+                <button
+                    type="button"
+                    id="command-palette-trigger"
+                    class="btn btn-ghost gap-2 normal-case font-normal text-base-content/60 border border-base-300 hover:border-base-content/20"
+                    aria-label="Open search"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+                    </svg>
+                    <span class="hidden sm:inline">Search...</span>
+                    <kbd class="kbd kbd-sm hidden md:inline-flex items-center justify-center leading-none">Ctrl</kbd>
+                    <kbd class="kbd kbd-sm hidden md:inline-flex items-center justify-center leading-none">K</kbd>
+                </button>
             @endif
         @endauth
         <button type="button" id="theme-toggle" class="btn btn-ghost" aria-label="Toggle theme" title="Toggle theme">
@@ -162,6 +166,34 @@
 <main class="flex-1 container mx-auto px-4 py-8">
     {{ $slot }}
 </main>
+
+@auth
+    @if (auth()->user()->hasVerifiedEmail())
+        <dialog id="command-palette" class="modal modal-top sm:modal-middle">
+            <div class="modal-box max-w-2xl p-0 overflow-hidden">
+                <div class="flex items-center gap-3 border-b border-base-300 px-4 py-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+                    </svg>
+                    <input
+                        type="search"
+                        id="command-palette-input"
+                        placeholder="Search users and chirps..."
+                        autocomplete="off"
+                        class="flex-1 bg-transparent outline-none text-base"
+                    />
+                    <kbd class="kbd kbd-sm">Esc</kbd>
+                </div>
+                <div id="command-palette-results" class="max-h-96 overflow-y-auto p-2">
+                    <p class="p-4 text-sm text-base-content/50 text-center">Type to search...</p>
+                </div>
+            </div>
+            <form method="dialog" class="modal-backdrop">
+                <button>close</button>
+            </form>
+        </dialog>
+    @endif
+@endauth
 
 <script>
     (function () {
