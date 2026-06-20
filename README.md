@@ -1,5 +1,7 @@
 # Chirper Together
 
+![Chirper Together](public/chirp-together.png)
+
 ![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white)
 ![PHP](https://img.shields.io/badge/PHP-8.2%2B-777BB4?logo=php&logoColor=white)
 ![Blade](https://img.shields.io/badge/Blade-Components-F05340?logo=laravel&logoColor=white)
@@ -30,7 +32,9 @@ Twitter-style social mini-network built with Laravel 12. Users post short chirps
 | Follow | Follow/unfollow users; counters on profile |
 | Profile | Public `/users/{user}` page with avatar, bio, chirp list, follower counters |
 | Search | Find chirps and users by name/email/message with LIKE-wildcard escaping |
+| Command palette | `Ctrl/Cmd+K` opens a debounced live-suggest modal hitting `/search/suggest` for users + chirps, with "see all results" fallback |
 | Notifications | Database channel for new followers, comments, and likes; navbar bell with unread badge |
+| Access control | Home, search, and notifications gated behind `auth` + `verified` middleware |
 | Theme | Light/dark toggle (DaisyUI `theme-controller`) with `localStorage` + `prefers-color-scheme` |
 | UX polish | Live character counters on textareas, long-word wrapping, DaisyUI numbered pagination |
 
@@ -44,7 +48,7 @@ app/
 database/migrations/     Users, chirps, likes, comments, follows, notifications, ...
 resources/
   views/                 Blade pages + chirps/comments components
-  js/                    charCounter, commentEdit, userReaction, sendChirpAttachment
+  js/                    charCounter, commentEdit, userReaction, sendChirpAttachment, commandPalette
   css/app.css            laravelChirper + laravelChirperDark DaisyUI themes
 routes/                  Split per resource: web, auth, chirps, comments, follows,
                          users, search, notifications, password, profile, verification
