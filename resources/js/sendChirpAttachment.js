@@ -4,7 +4,9 @@
  * - Quando um arquivo é selecionado, exibe o nome no label
  * - Quando nenhum arquivo está selecionado, esconde o label
  */
-document.getElementById('attachment-input').addEventListener('change', function () {
+const attachmentInput = document.getElementById('attachment-input');
+
+attachmentInput?.addEventListener('change', function () {
     const label = document.getElementById('file-name');
     if (this.files.length > 0) {
         label.textContent = this.files[0].name;

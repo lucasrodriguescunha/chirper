@@ -24,9 +24,6 @@
           content="A demo social media platform highlighting the power and simplicity of Laravel."/>
     <meta property="og:url" content="https://chirper.laravel.cloud"/>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
-    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96x96.png') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/userReaction.js', 'resources/js/sendChirpAttachment.js', 'resources/js/charCounter.js', 'resources/js/commentEdit.js', 'resources/js/commandPalette.js'])
