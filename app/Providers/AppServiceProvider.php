@@ -26,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
 
         if ($this->app->isProduction()) {
             URL::forceScheme('https');
+
+            if (config('app.debug')) {
+                throw new \RuntimeException('APP_DEBUG must be false in production to avoid leaking stack traces and environment data.');
+            }
         }
 
         Password::defaults(function () {
