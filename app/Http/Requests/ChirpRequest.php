@@ -21,7 +21,7 @@ class ChirpRequest extends FormRequest
     {
         return [
             'message' => 'required|string|max:255',
-            'attachment' => 'nullable|file|max:2048|mimes:jpg,webp,jpeg,png,gif,pdf,txt',
+            'attachment' => 'nullable|image|max:2048|mimes:jpg,jpeg,png,webp,gif',
         ];
     }
 
@@ -34,7 +34,8 @@ class ChirpRequest extends FormRequest
             'message.required' => 'Please write something to chirp!',
             'message.max' => 'Chirps must be 255 characters or less',
             'attachment.max' => 'File must be under 2MB',
-            'attachment.mimes' => 'Only images, PDFs and text files are allowed',
+            'attachment.image' => 'Attachment must be an image (jpg, jpeg, png, webp, gif).',
+            'attachment.mimes' => 'Only jpg, jpeg, png, webp, and gif images are allowed.',
         ];
     }
 }

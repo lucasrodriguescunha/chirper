@@ -76,11 +76,7 @@
                 </p>
 
                 @if ($chirp->attachments?->path && Storage::disk('public')->exists($chirp->attachments->path))
-                    @if (in_array($chirp->attachments->type, ['txt', 'pdf', 'svg', 'gif']))
-                        <a href="{{ Storage::url($chirp->attachments->path) }}" download="true">Baixar conteúdo</a>
-                    @else
-                        <img class="mt-1 max-w-full h-auto rounded-md" src="{{ Storage::url($chirp->attachments->path) }}" alt=""/>
-                    @endif
+                    <img class="mt-1 max-w-full h-auto rounded-md" src="{{ Storage::url($chirp->attachments->path) }}" alt=""/>
                 @endif
 
                 <div class="flex items-center gap-3 mt-3">
