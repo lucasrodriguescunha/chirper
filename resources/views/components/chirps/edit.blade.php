@@ -4,9 +4,9 @@
     </x-slot:title>
 
     <div class="max-w-2xl mx-auto">
-        <h1 class="text-3xl font-bold mt-8">Edit Chirp</h1>
+        <h1 class="text-2xl sm:text-3xl font-bold mt-6 sm:mt-8">Edit Chirp</h1>
 
-        <div class="card bg-base-100 mt-8">
+        <div class="card bg-base-100 mt-6 sm:mt-8">
             <div class="card-body">
                 <form method="POST" action="/chirps/{{ $chirp->id }}">
                     @csrf

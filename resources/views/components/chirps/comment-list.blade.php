@@ -74,7 +74,7 @@
         </div>
 
         @if (auth()->id() === $comment->user_id)
-            <div class="flex flex-col mt-1">
+            <div class="flex flex-col mt-1 shrink-0">
                 <button type="button" class="btn btn-ghost" data-comment-edit-toggle>✎</button>
                 <form method="POST" action="/chirps/{{ $chirp->id }}/comments/{{ $comment->id }}">
                     @csrf

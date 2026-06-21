@@ -38,7 +38,7 @@
     <div class="navbar-start">
         <a href="/">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 312 69"
-                 class="h-7 w-auto px-4">
+                 class="h-6 sm:h-7 w-auto px-2 sm:px-4">
                 <path fill="#D9D9D9"
                       d="M40.97.446c22.091 0 40 17.909 40 40a39.805 39.805 0 0 1-6.56 21.95c-.61.928-1.87 1.105-2.825.541a18.92 18.92 0 0 0-9.651-2.63c-.787 0-1.563.048-2.325.141a19.108 19.108 0 0 0-7.03-9.607 18.57 18.57 0 0 0 5.996-11.778l8.493-7.543a.931.931 0 0 0-.43-1.607l-10.423-2.138c-3.207-5.575-9.218-9.329-16.103-9.329-10.256 0-18.57 8.33-18.571 18.605 0 1.274.128 2.519.372 3.721-6.58.032-12.37 3.407-15.764 8.517-1.07 1.61-3.854 1.582-4.265-.306a40.101 40.101 0 0 1-.914-8.537c0-22.091 17.908-40 40-40Z"/>
                 <path fill="url(#a)"
@@ -64,7 +64,7 @@
             </svg>
         </a>
     </div>
-    <div class="navbar-end gap-4 px-4">
+    <div class="navbar-end gap-1 sm:gap-3 px-2 sm:px-4">
         @auth
             @if (auth()->user()->hasVerifiedEmail())
                 <button
@@ -163,7 +163,7 @@
     </div>
 @endif
 
-<main class="flex-1 container mx-auto px-4 py-8">
+<main class="flex-1 container mx-auto px-3 sm:px-4 py-4 sm:py-8">
     {{ $slot }}
 </main>
 
@@ -218,6 +218,8 @@
     })();
 
 </script>
+
+@stack('scripts')
 
 <footer class="footer footer-center p-5 bg-base-300 text-base-content text-xs">
     <div>

@@ -4,26 +4,26 @@
     </x-slot:title>
 
     <div class="max-w-2xl mx-auto">
-        <h1 class="text-3xl font-bold mt-8">Search</h1>
+        <h1 class="text-2xl sm:text-3xl font-bold mt-6 sm:mt-8">Search</h1>
 
         <form method="GET" action="{{ route('search') }}" class="mt-4">
-            <div class="flex gap-2">
+            <div class="flex flex-col sm:flex-row gap-2">
                 <input
                     type="search"
                     name="q"
                     value="{{ $q }}"
                     placeholder="Search chirps and users..."
-                    class="input input-bordered flex-1"
+                    class="input input-bordered flex-1 w-full"
                     autofocus
                 />
-                <button type="submit" class="btn btn-primary">Search</button>
+                <button type="submit" class="btn btn-primary w-full sm:w-auto">Search</button>
             </div>
         </form>
 
         @if ($q === '')
             <p class="text-base-content/60 mt-6">Type a query to find chirps or users.</p>
         @else
-            <h2 class="text-xl font-semibold mt-8">Users</h2>
+            <h2 class="text-lg sm:text-xl font-semibold mt-6 sm:mt-8">Users</h2>
             @if ($users->isEmpty())
                 <p class="text-base-content/60 mt-2">No users matched "{{ $q }}".</p>
             @else
@@ -44,7 +44,7 @@
                 </ul>
             @endif
 
-            <h2 class="text-xl font-semibold mt-8">Chirps</h2>
+            <h2 class="text-lg sm:text-xl font-semibold mt-6 sm:mt-8">Chirps</h2>
             @if ($chirps->isEmpty())
                 <p class="text-base-content/60 mt-2">No chirps matched "{{ $q }}".</p>
             @else

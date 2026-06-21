@@ -3,8 +3,8 @@
         Home Feed
     </x-slot:title>
     <div class="max-w-2xl mx-auto">
-        <h1 class="text-3xl font-bold mt-8">Latest Chirps</h1>
-        <div class="card bg-base-100 shadow mt-8">
+        <h1 class="text-2xl sm:text-3xl font-bold mt-6 sm:mt-8">Latest Chirps</h1>
+        <div class="card bg-base-100 shadow mt-6 sm:mt-8">
             <div class="card-body">
                 <form method="POST" action="/chirps" enctype="multipart/form-data">
                     <!-- CSRF (Cross-Site Request Forgery) -->
@@ -26,7 +26,7 @@
                         @enderror
                     </div>
 
-                    <div class="mt-4 flex items-center justify-end gap-2">
+                    <div class="mt-4 flex flex-wrap items-center justify-end gap-2">
                         <input
                             type="file"
                             name="attachment"

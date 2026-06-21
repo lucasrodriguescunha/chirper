@@ -4,22 +4,24 @@
     </x-slot:title>
 
     <div class="max-w-2xl mx-auto">
-        <h1 class="text-3xl font-bold mt-8">Edit Profile</h1>
+        <h1 class="text-2xl sm:text-3xl font-bold mt-6 sm:mt-8">Edit Profile</h1>
 
-        <div class="card bg-base-100 mt-8">
+        <div class="card bg-base-100 mt-6 sm:mt-8">
             <div class="card-body">
                 <form method="POST" action="{{ route('settings.profile.update') }}" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
 
-                    <div class="flex items-center gap-4 mb-6">
-                        <div class="avatar">
-                            <div class="size-16 rounded-full">
+                    <div class="flex flex-wrap items-center gap-3 sm:gap-4 mb-6">
+                        <div class="avatar shrink-0">
+                            <div class="size-14 sm:size-16 rounded-full">
                                 <img src="{{ $user->avatarUrl() }}" alt="Your avatar"/>
                             </div>
                         </div>
-                        <span class="text-sm text-base-content/60">Following: {{ $user->following()->count() }}</span>
-                        <span class="text-sm text-base-content/60">Followers: {{ $user->followers()->count() }}</span>
+                        <div class="flex flex-wrap gap-x-4 gap-y-1">
+                            <span class="text-sm text-base-content/60">Following: {{ $user->following()->count() }}</span>
+                            <span class="text-sm text-base-content/60">Followers: {{ $user->followers()->count() }}</span>
+                        </div>
                     </div>
 
                     <div class="form-control w-full mb-4">

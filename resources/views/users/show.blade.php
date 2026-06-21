@@ -6,16 +6,16 @@
     <div class="max-w-2xl mx-auto">
         <div class="card bg-base-100 shadow mt-8">
             <div class="card-body">
-                <div class="flex items-start gap-4">
-                    <div class="avatar">
-                        <div class="size-20 rounded-full">
+                <div class="flex items-start gap-3 sm:gap-4">
+                    <div class="avatar shrink-0">
+                        <div class="size-14 sm:size-20 rounded-full">
                             <img src="{{ $user->avatarUrl() }}" alt="{{ $user->name }}'s avatar"/>
                         </div>
                     </div>
 
-                    <div class="flex-1">
-                        <div class="flex items-center justify-between">
-                            <h1 class="text-2xl font-bold">{{ $user->name }}</h1>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <h1 class="text-xl sm:text-2xl font-bold truncate">{{ $user->name }}</h1>
 
                             @auth
                                 @if ($user->id !== auth()->id())
@@ -36,10 +36,10 @@
                         </div>
 
                         @if ($user->bio)
-                            <p class="mt-2 text-base-content/80">{{ $user->bio }}</p>
+                            <p class="mt-2 text-sm sm:text-base text-base-content/80 break-words">{{ $user->bio }}</p>
                         @endif
 
-                        <div class="flex gap-4 mt-3 text-sm text-base-content/70">
+                        <div class="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-sm text-base-content/70">
                             <span><strong>{{ $user->following()->count() }}</strong> Following</span>
                             <span><strong>{{ $user->followers()->count() }}</strong> Followers</span>
                             <span><strong>{{ $user->chirps()->count() }}</strong> Chirps</span>
@@ -49,7 +49,7 @@
             </div>
         </div>
 
-        <h2 class="text-xl font-bold mt-8">Chirps</h2>
+        <h2 class="text-lg sm:text-xl font-bold mt-6 sm:mt-8">Chirps</h2>
 
         <div class="space-y-4 mt-4">
             @forelse ($chirps as $chirp)

@@ -27,10 +27,10 @@
             @endif
 
             <div class="min-w-0 flex-1">
-                <div class="flex justify-between w-full">
-                    <div class="flex items-center space-x-1">
+                <div class="flex flex-wrap items-start justify-between gap-2 w-full">
+                    <div class="flex flex-wrap items-center gap-x-1 min-w-0">
                         @if ($chirp->user)
-                            <a href="{{ route('users.show', $chirp->user) }}" class="text-sm font-semibold hover:underline">
+                            <a href="{{ route('users.show', $chirp->user) }}" class="text-sm font-semibold hover:underline truncate max-w-[60vw]">
                                 {{ $chirp->user->name }}
                             </a>
                         @else
@@ -40,18 +40,18 @@
                         <span class="text-base-content/60">•</span>
 
                         @if ($chirp->updated_at->gt($chirp->created_at->addSeconds(5)))
-                            <span class="text-sm text-base-content/60 italic">
+                            <span class="text-xs sm:text-sm text-base-content/60 italic">
                                 Edited {{ $chirp->updated_at->diffForHumans() }}
                             </span>
                         @else
-                            <span class="text-sm text-base-content/60">
+                            <span class="text-xs sm:text-sm text-base-content/60">
                                 Published {{ $chirp->created_at->diffForHumans() }}
                             </span>
                         @endif
                     </div>
 
                     @can('update', $chirp)
-                        <div class="flex gap-1">
+                        <div class="flex gap-1 shrink-0">
                             <a href="/chirps/{{ $chirp->id }}/edit" class="btn btn-ghost">
                                 Edit
                             </a>
@@ -79,7 +79,7 @@
                     @if (in_array($chirp->attachments->type, ['txt', 'pdf', 'svg', 'gif']))
                         <a href="{{ Storage::url($chirp->attachments->path) }}" download="true">Baixar conteúdo</a>
                     @else
-                        <img class="mt-1" src="{{ Storage::url($chirp->attachments->path) }}" alt=""/>
+                        <img class="mt-1 max-w-full h-auto rounded-md" src="{{ Storage::url($chirp->attachments->path) }}" alt=""/>
                     @endif
                 @endif
 
