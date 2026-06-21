@@ -103,7 +103,7 @@
                 <div tabindex="0" role="button" class="btn btn-ghost gap-2 px-2" aria-label="Account menu">
                     <div class="avatar">
                         <div class="w-8 rounded-full">
-                            <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->name }}" />
+                            <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->name }}" class="object-cover w-full h-full"/>
                         </div>
                     </div>
                     <span class="hidden sm:inline text-sm">{{ auth()->user()->name }}</span>

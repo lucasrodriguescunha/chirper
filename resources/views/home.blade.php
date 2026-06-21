@@ -28,11 +28,26 @@
                         <x-alert type="error" size="sm" soft class="mt-2">{{ $message }}</x-alert>
                     @enderror
 
+                    <div id="attachment-preview" class="mt-3 hidden">
+                        <div class="relative inline-block">
+                            <img id="attachment-preview-img" alt="Selected attachment preview" class="max-h-48 rounded-md border border-base-300"/>
+                            <button
+                                type="button"
+                                id="attachment-clear"
+                                class="btn btn-circle btn-xs btn-error absolute -top-2 -right-2"
+                                aria-label="Remove attachment"
+                            >
+                                ✕
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="mt-4 flex flex-wrap items-center justify-end gap-2">
                         <input
                             type="file"
                             name="attachment"
                             id="attachment-input"
+                            accept="image/jpeg,image/png,image/webp,image/gif"
                             class="hidden"
                         />
 
@@ -41,7 +56,8 @@
                         <button
                             type="button"
                             class="btn btn-ghost"
-                            onclick="document.getElementById('attachment-input').click()"
+                            id="attachment-trigger"
+                            aria-label="Attach image"
                         >
                             <x-ionicon-add-outline class="w-5 h-5"/>
                         </button>

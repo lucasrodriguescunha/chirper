@@ -15,7 +15,7 @@
                     <div class="flex flex-wrap items-center gap-3 sm:gap-4 mb-6">
                         <div class="avatar shrink-0">
                             <div class="size-14 sm:size-16 rounded-full">
-                                <img src="{{ $user->avatarUrl() }}" alt="Your avatar"/>
+                                <img src="{{ $user->avatarUrl() }}" alt="Your avatar" class="object-cover w-full h-full"/>
                             </div>
                         </div>
                         <div class="flex flex-wrap gap-x-4 gap-y-1">

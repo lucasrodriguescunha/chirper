@@ -9,7 +9,7 @@
                 <div class="flex items-start gap-3 sm:gap-4">
                     <div class="avatar shrink-0">
                         <div class="size-14 sm:size-20 rounded-full">
-                            <img src="{{ $user->avatarUrl() }}" alt="{{ $user->name }}'s avatar"/>
+                            <img src="{{ $user->avatarUrl() }}" alt="{{ $user->name }}'s avatar" class="object-cover w-full h-full"/>
                         </div>
                     </div>
 
