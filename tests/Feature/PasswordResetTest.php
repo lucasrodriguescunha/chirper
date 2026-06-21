@@ -30,12 +30,12 @@ it('resets the password with a valid token', function () {
         $response = $this->post('/reset-password', [
             'token' => $notification->token,
             'email' => $user->email,
-            'password' => 'new-secret-pass',
-            'password_confirmation' => 'new-secret-pass',
+            'password' => 'New-Secret-Pass1!',
+            'password_confirmation' => 'New-Secret-Pass1!',
         ]);
 
         $response->assertRedirect(route('login'));
-        expect(Hash::check('new-secret-pass', $user->fresh()->password))->toBeTrue();
+        expect(Hash::check('New-Secret-Pass1!', $user->fresh()->password))->toBeTrue();
 
         return true;
     });
