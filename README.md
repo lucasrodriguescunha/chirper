@@ -24,6 +24,8 @@ Live: [chirper-master-ej8kbb.laravel.cloud](https://chirper-master-ej8kbb.larave
 - **Frontend**: Blade components, Vite 7, TailwindCSS 4, DaisyUI 5
 - **Database**: SQLite (default), MySQL/PostgreSQL compatible via Eloquent
 - **Mail**: Resend (`resend/resend-laravel`) — `MAIL_MAILER=resend`, set `RESEND_API_KEY` in `.env`
+- **Bot protection**: Cloudflare Turnstile on login/register — set `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in `.env` (skipped automatically when blank in local dev)
+- **2FA**: TOTP secrets and recovery codes stored on `users` (encrypted), QR code rendered as inline SVG
 - **Testing**: Pest 4 + pest-plugin-laravel; SQLite `:memory:` for fast feature tests
 - **E2E**: Playwright
 - **Deploy**: Laravel Cloud — Flex 256 MiB compute (US East / Ohio), Serverless Postgres 17 (¼ unit), edge network with DDoS protection + CDN + edge caching
@@ -32,18 +34,22 @@ Live: [chirper-master-ej8kbb.laravel.cloud](https://chirper-master-ej8kbb.larave
 
 | Area | Highlights |
 |------|-----------|
-| Auth | Register, login, email verification (Resend), password reset; logout gated by `verified` middleware — unverified accounts must confirm email before signing out |
+| Auth | Register, login, email verification (Resend), password reset; strong password policy via `Password::defaults()`; Cloudflare Turnstile CAPTCHA on login/register; logout gated by `verified` middleware — unverified accounts must confirm email before signing out |
+| Two-factor auth | TOTP enrollment with QR code at `/settings/two-factor`, single-use recovery codes (regenerable behind `current_password`), guest-only `/two-factor-challenge` after login, throttled 6/min |
 | Mail | Transactional mail via Resend (verification + password reset) |
-| Chirps | Create, edit (owner), delete, optional file attachment, like/dislike reactions |
+| Chirps | Create, edit (owner), delete, image-only attachment (`jpg/jpeg/png/webp/gif`, ≤ 2 MB), like/dislike reactions |
 | Comments | Threaded under chirps, inline edit, owner delete, like/dislike |
 | Follow | Follow/unfollow users; counters on profile |
 | Profile | Public `/users/{user}` page with avatar, bio, chirp list, follower counters |
 | Search | Find chirps and users by name/email/message with LIKE-wildcard escaping |
 | Command palette | `Ctrl/Cmd+K` opens a debounced live-suggest modal hitting `/search/suggest` for users + chirps, with "see all results" fallback |
-| Notifications | Database channel for new followers, comments, and likes; navbar bell with unread badge |
-| Access control | Home, search, notifications, and logout gated behind `auth` + `verified` middleware |
-| Theme | Light/dark toggle (DaisyUI `theme-controller`) with `localStorage` + `prefers-color-scheme` |
-| UX polish | Live character counters on textareas, long-word wrapping, DaisyUI numbered pagination |
+| Notifications | Database channel for new followers, comments, and likes; navbar bell with unread badge; per-item delete and "Clear all" |
+| Access control | Home, search, notifications, settings, and logout gated behind `auth` + `verified` middleware |
+| Rate limiting | Per-route throttles: register `5/min`, password reset `6/min`, verification resend `6/min`, 2FA challenge `6/min`, chirp/comment create `20/min`, reactions `60/min`; login limited to 3 attempts per 15 min per `email+IP` |
+| Security headers | CSP, HSTS (prod), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`, COOP/CORP cross-origin isolation; HTTPS enforced in production |
+| Hardening | Boot aborts when `APP_DEBUG=true` under `APP_ENV=production` to prevent accidental stack-trace leaks |
+| Theme | Light/dark toggle (DaisyUI `theme-controller`) with `localStorage` + `prefers-color-scheme`, applied inline before paint to avoid flashes |
+| UX polish | Mobile-first responsive layout (DaisyUI utilities), unified `x-alert` component for flash + validation messages, live character counters on textareas, long-word wrapping, DaisyUI numbered pagination |
 
 ## Project layout
 
@@ -136,3 +142,15 @@ The navbar bell shows unread count; visiting `/notifications` marks everything r
 ## Themes
 
 Two DaisyUI themes are defined in `resources/css/app.css`: `laravelChirper` (light) and `laravelChirperDark` (dark). Selection is persisted in `localStorage` and applied via an inline `<script>` in `<head>` before paint to avoid flashes.
+
+## Security
+
+- **Strong passwords** — `Password::defaults()` enforces min length, mixed case, numbers, and symbols on register / reset.
+- **Turnstile CAPTCHA** — login and register submissions are verified server-side against Cloudflare Turnstile when keys are configured.
+- **Two-factor authentication** — opt-in TOTP at `/settings/two-factor`. After a successful login on a 2FA-enabled account the user is redirected to `/two-factor-challenge` (guest-only, throttled `6/min`) and can authenticate with either a TOTP code or a one-time recovery code. Recovery codes can be regenerated behind `current_password`.
+- **Rate limiting** — every authentication endpoint and write endpoint is throttled. Login uses a custom limiter of 3 attempts per 15 min per `email+IP`; register, password reset, verification resend, and 2FA challenge use Laravel `throttle:` middleware; chirp/comment create are `20/min` and reactions `60/min`.
+- **HTTP security headers** — `SecurityHeaders` middleware sets `Content-Security-Policy`, `Strict-Transport-Security` (production only), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` (camera/mic/geolocation/payment disabled), and COOP / CORP for cross-origin isolation.
+- **HTTPS in production** — schema is forced to HTTPS and `upgrade-insecure-requests` is added to the CSP when `APP_ENV=production`.
+- **Attachment hardening** — chirp uploads are restricted to images (`jpg/jpeg/png/webp/gif`, ≤ 2 MB) to remove PDF/text attack surface; uploads run inside a DB transaction and the file is cleaned up if the commit fails.
+- **Boot guard** — application refuses to boot when `APP_DEBUG=true` under `APP_ENV=production`, preventing stack-trace leaks in deployed environments.
+- **Authorization** — chirp edit/delete gated by `ChirpPolicy`; comments and follows check ownership / self-follow in the controllers; logout requires a verified email so unverified sessions cannot escape the verification wall.
