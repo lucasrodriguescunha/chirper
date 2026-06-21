@@ -25,7 +25,7 @@ Route::middleware('guest')->group(function () {
         return $status === Password::ResetLinkSent
             ? back()->with(['status' => __($status)])
             : back()->withErrors(['email' => __($status)]);
-    })->name('password.email');
+    })->middleware('throttle:6,1')->name('password.email');
 
     Route::get('/reset-password/{token}', function (string $token) {
         return view('auth.reset-password', [
@@ -65,5 +65,5 @@ Route::middleware('guest')->group(function () {
             : back()->withErrors([
                 'email' => [__($status)]
             ]);
-    })->name('password.update');
+    })->middleware('throttle:6,1')->name('password.update');
 });
