@@ -14,8 +14,6 @@
         @endpush
     @endonce
     @error('cf-turnstile-response')
-        <div class="label -mt-2 mb-2">
-            <span class="label-text-alt text-error">{{ $message }}</span>
-        </div>
+        <x-alert type="error" size="sm" soft class="mb-2">{{ $message }}</x-alert>
     @enderror
 @endif

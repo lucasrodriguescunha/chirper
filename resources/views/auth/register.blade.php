@@ -12,7 +12,7 @@
                     <form method="POST" action="/register">
                         @csrf
 
-                        <label class="floating-label mb-6">
+                        <label class="floating-label mb-4">
                             <input
                                 type="text"
                                 name="name"
@@ -25,12 +25,10 @@
                         </label>
 
                         @error('name')
-                        <div class="label -mt-4 mb-2">
-                            <span class="label-text-alt text-error">{{ $message }}</span>
-                        </div>
+                            <x-alert type="error" size="sm" soft class="mb-4">{{ $message }}</x-alert>
                         @enderror
 
-                        <label class="floating-label mb-6">
+                        <label class="floating-label mb-4">
                             <input
                                 type="email"
                                 name="email"
@@ -43,12 +41,10 @@
                         </label>
 
                         @error('email')
-                        <div class="label -mt-4 mb-2">
-                            <span class="label-text-alt text-error">{{ $message }}</span>
-                        </div>
+                            <x-alert type="error" size="sm" soft class="mb-4">{{ $message }}</x-alert>
                         @enderror
 
-                        <label class="floating-label mb-6">
+                        <label class="floating-label mb-4">
                             <input
                                 type="password"
                                 name="password"
@@ -60,16 +56,12 @@
                         </label>
 
                         @error('password')
-                        <div class="label -mt-4 mb-2">
-                            <span class="label-text-alt text-error">{{ $message }}</span>
-                        </div>
+                            <x-alert type="error" size="sm" soft class="mb-4">{{ $message }}</x-alert>
                         @else
-                        <div class="label -mt-4 mb-2">
-                            <span class="label-text-alt text-base-content/60">Min 8 chars: upper + lower + number + symbol.</span>
-                        </div>
+                            <p class="text-xs text-base-content/60 mb-4">Min 8 chars: upper + lower + number + symbol.</p>
                         @enderror
 
-                        <label class="floating-label mb-6">
+                        <label class="floating-label mb-4">
                             <input
                                 type="password"
                                 name="password_confirmation"
@@ -82,7 +74,7 @@
 
                         <x-turnstile />
 
-                        <div class="form-control mt-8">
+                        <div class="form-control mt-6">
                             <button
                                 type="submit"
                                 class="btn btn-primary w-full"

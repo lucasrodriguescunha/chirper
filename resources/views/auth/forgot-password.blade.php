@@ -17,15 +17,13 @@
                     </p>
 
                     @if (session('status'))
-                        <div class="alert alert-success mb-4">
-                            {{ session('status') }}
-                        </div>
+                        <x-alert type="success" size="sm" soft class="mb-4 text-left">{{ session('status') }}</x-alert>
                     @endif
 
                     <form method="POST" action="{{ route('password.email') }}">
                         @csrf
 
-                        <label class="floating-label mb-6">
+                        <label class="floating-label mb-4">
                             <input type="email"
                                    name="email"
                                    placeholder="mail@example.com"
@@ -37,9 +35,7 @@
                         </label>
 
                         @error('email')
-                        <div class="label -mt-4 mb-2">
-                            <span class="label-text-alt text-error">{{ $message }}</span>
-                        </div>
+                            <x-alert type="error" size="sm" soft class="mb-4 text-left">{{ $message }}</x-alert>
                         @enderror
 
                         <button class="btn btn-primary w-full">

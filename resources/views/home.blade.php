@@ -20,11 +20,13 @@
                         >{{ old('message') }}</textarea>
 
                         @error('message')
-                        <div class="label">
-                            <span class="label-text-alt text-error">{{ $message }}</span>
-                        </div>
+                            <x-alert type="error" size="sm" soft class="mt-2">{{ $message }}</x-alert>
                         @enderror
                     </div>
+
+                    @error('attachment')
+                        <x-alert type="error" size="sm" soft class="mt-2">{{ $message }}</x-alert>
+                    @enderror
 
                     <div class="mt-4 flex flex-wrap items-center justify-end gap-2">
                         <input
@@ -43,12 +45,6 @@
                         >
                             <x-ionicon-add-outline class="w-5 h-5"/>
                         </button>
-
-                        @error('attachment')
-                        <div class="label">
-                            <span class="label-text-alt text-error">{{ $message }}</span>
-                        </div>
-                        @enderror
 
                         <button type="submit" class="btn btn-primary">
                             <x-carbon-send class="w-5 h-5"/>

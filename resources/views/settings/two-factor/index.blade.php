@@ -6,13 +6,13 @@
         <p class="text-base-content/70 mt-2">Add an extra layer of security to your account using a TOTP app (Google Authenticator, 1Password, Authy).</p>
 
         @if ($errors->any())
-            <div class="alert alert-error mt-4">
-                <ul class="list-disc list-inside text-sm">
+            <x-alert type="error" size="sm" soft class="mt-4">
+                <ul class="list-disc list-inside">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
-            </div>
+            </x-alert>
         @endif
 
         <div class="card bg-base-100 mt-6">
@@ -22,7 +22,7 @@
                     <p class="mt-2">Two-factor authentication is active on your account.</p>
 
                     @if ($recoveryCodes)
-                        <div class="alert alert-warning mt-4">
+                        <x-alert type="warning" soft class="mt-4 items-start">
                             <div>
                                 <p class="font-semibold">Save these recovery codes</p>
                                 <p class="text-sm">Each can be used once if you lose access to your authenticator app.</p>
@@ -32,7 +32,7 @@
                                     @endforeach
                                 </ul>
                             </div>
-                        </div>
+                        </x-alert>
                     @endif
 
                     <form method="POST" action="{{ route('settings.two-factor.recovery-codes') }}" class="mt-6 space-y-3">

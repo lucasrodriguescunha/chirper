@@ -10,10 +10,14 @@
 
                     <h1 class="text-xl mt-1 font-bold text-center mb-6">Welcome Back</h1>
 
+                    @if (session('status'))
+                        <x-alert type="success" size="sm" soft class="mb-4">{{ session('status') }}</x-alert>
+                    @endif
+
                     <form method="POST" action="/login">
                         @csrf
 
-                        <label class="floating-label mb-6">
+                        <label class="floating-label mb-4">
                             <input type="email"
                                    name="email"
                                    placeholder="mail@example.com"
@@ -24,12 +28,10 @@
                             <span>Email</span>
                         </label>
                         @error('email')
-                        <div class="label -mt-4 mb-2">
-                            <span class="label-text-alt text-error">{{ $message }}</span>
-                        </div>
+                            <x-alert type="error" size="sm" soft class="mb-4">{{ $message }}</x-alert>
                         @enderror
 
-                        <label class="floating-label mb-6">
+                        <label class="floating-label mb-4">
                             <input type="password"
                                    name="password"
                                    placeholder="••••••••"
@@ -38,9 +40,7 @@
                             <span>Password</span>
                         </label>
                         @error('password')
-                        <div class="label -mt-4 mb-2">
-                            <span class="label-text-alt text-error">{{ $message }}</span>
-                        </div>
+                            <x-alert type="error" size="sm" soft class="mb-4">{{ $message }}</x-alert>
                         @enderror
 
                         <div class="form-control mt-4">
@@ -54,7 +54,7 @@
 
                         <x-turnstile />
 
-                        <div class="form-control mt-8">
+                        <div class="form-control mt-6">
                             <button type="submit" class="btn btn-primary w-full">
                                 Sign In
                             </button>

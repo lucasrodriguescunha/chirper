@@ -22,9 +22,7 @@
                         >{{ old('message', $chirp->message) }}</textarea>
 
                         @error('message')
-                        <div class="label">
-                            <span class="label-text-alt text-error">{{ $message }}</span>
-                        </div>
+                            <x-alert type="error" size="sm" soft class="mt-2">{{ $message }}</x-alert>
                         @enderror
                     </div>
 

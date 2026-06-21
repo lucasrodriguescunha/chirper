@@ -35,9 +35,7 @@
                             class="file-input file-input-bordered w-full @error('avatar') file-input-error @enderror"
                         />
                         @error('avatar')
-                        <div class="label">
-                            <span class="label-text-alt text-error">{{ $message }}</span>
-                        </div>
+                            <x-alert type="error" size="sm" soft class="mt-2">{{ $message }}</x-alert>
                         @enderror
                     </div>
 
@@ -53,9 +51,7 @@
                             maxlength="255"
                         />
                         @error('name')
-                        <div class="label">
-                            <span class="label-text-alt text-error">{{ $message }}</span>
-                        </div>
+                            <x-alert type="error" size="sm" soft class="mt-2">{{ $message }}</x-alert>
                         @enderror
                     </div>
 
@@ -72,9 +68,7 @@
                             placeholder="Tell people about yourself"
                         >{{ old('bio', $user->bio) }}</textarea>
                         @error('bio')
-                        <div class="label">
-                            <span class="label-text-alt text-error">{{ $message }}</span>
-                        </div>
+                            <x-alert type="error" size="sm" soft class="mt-2">{{ $message }}</x-alert>
                         @enderror
                     </div>
 

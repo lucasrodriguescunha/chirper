@@ -10,6 +10,10 @@
                         Enter the 6-digit code from your authenticator app, or use a recovery code.
                     </p>
 
+                    @error('code')
+                        <x-alert type="error" size="sm" soft class="mb-4">{{ $message }}</x-alert>
+                    @enderror
+
                     <form method="POST" action="{{ route('two-factor.challenge') }}">
                         @csrf
 
@@ -28,12 +32,6 @@
                                    class="input input-bordered">
                             <span>Recovery code</span>
                         </label>
-
-                        @error('code')
-                            <div class="label mb-2">
-                                <span class="label-text-alt text-error">{{ $message }}</span>
-                            </div>
-                        @enderror
 
                         <div class="form-control mt-4">
                             <button type="submit" class="btn btn-primary w-full">Verify</button>
