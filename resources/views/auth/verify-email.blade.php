@@ -27,16 +27,6 @@
                             Forward email
                         </button>
                     </form>
-
-                    <form method="POST" action="/logout" class="mt-2">
-                        @csrf
-                        <button
-                            type="submit"
-                            class="btn btn-ghost w-full"
-                        >
-                            Logout
-                        </button>
-                    </form>
                 </div>
             </div>
         </div>

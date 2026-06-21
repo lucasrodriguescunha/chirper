@@ -14,5 +14,5 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::post('/logout', LogoutController::class)
-    ->middleware('auth')
+    ->middleware(['auth', 'verified'])
     ->name('logout');

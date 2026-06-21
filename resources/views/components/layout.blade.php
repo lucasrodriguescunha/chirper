@@ -117,15 +117,15 @@
                 <ul tabindex="0" class="dropdown-content menu z-1 mt-3 w-52 rounded-box bg-base-100 p-2 shadow">
                     @if (auth()->user()->hasVerifiedEmail())
                         <li><a href="{{ route('settings.profile.edit') }}">Profile</a></li>
+                        <li>
+                            <form method="POST" action="/logout">
+                                @csrf
+                                <button type="submit" class="text-error">Logout</button>
+                            </form>
+                        </li>
                     @else
                         <li><a href="{{ route('verification.notice') }}">Verify email</a></li>
                     @endif
-                    <li>
-                        <form method="POST" action="/logout">
-                            @csrf
-                            <button type="submit" class="text-error">Logout</button>
-                        </form>
-                    </li>
                 </ul>
             </div>
         @else
