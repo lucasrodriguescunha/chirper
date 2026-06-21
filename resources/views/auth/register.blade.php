@@ -76,6 +76,8 @@
                             <span>Confirm Password</span>
                         </label>
 
+                        <x-turnstile />
+
                         <div class="form-control mt-8">
                             <button
                                 type="submit"

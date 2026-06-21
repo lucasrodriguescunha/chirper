@@ -52,6 +52,8 @@
                             </label>
                         </div>
 
+                        <x-turnstile />
+
                         <div class="form-control mt-8">
                             <button type="submit" class="btn btn-primary w-full">
                                 Sign In

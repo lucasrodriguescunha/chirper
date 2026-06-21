@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Turnstile;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
@@ -28,6 +29,7 @@ class LoginRequest extends FormRequest
         return [
             'email'    => 'required|email',
             'password' => 'required',
+            'cf-turnstile-response' => ['nullable', 'string', new Turnstile()],
         ];
     }
 
