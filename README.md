@@ -11,6 +11,7 @@
 ![SQLite](https://img.shields.io/badge/SQLite-default-003B57?logo=sqlite&logoColor=white)
 ![Pest](https://img.shields.io/badge/Pest-4-8B5CF6?logo=php&logoColor=white)
 ![Playwright](https://img.shields.io/badge/Playwright-E2E-2EAD33?logo=playwright&logoColor=white)
+![Resend](https://img.shields.io/badge/Resend-Mail-000000?logo=resend&logoColor=white)
 ![Laravel Cloud](https://img.shields.io/badge/Deploy-Laravel%20Cloud-FF2D20?logo=laravel&logoColor=white)
 
 Twitter-style social mini-network built with Laravel 12. Users post short chirps, follow each other, comment, react with like/dislike, and get notified when others interact with their content.
@@ -22,6 +23,7 @@ Live: [chirper-master-ej8kbb.laravel.cloud](https://chirper-master-ej8kbb.larave
 - **Backend**: Laravel 12, PHP 8.2+
 - **Frontend**: Blade components, Vite 7, TailwindCSS 4, DaisyUI 5
 - **Database**: SQLite (default), MySQL/PostgreSQL compatible via Eloquent
+- **Mail**: Resend (`resend/resend-laravel`) — `MAIL_MAILER=resend`, set `RESEND_API_KEY` in `.env`
 - **Testing**: Pest 4 + pest-plugin-laravel; SQLite `:memory:` for fast feature tests
 - **E2E**: Playwright
 - **Deploy**: Laravel Cloud — Flex 256 MiB compute (US East / Ohio), Serverless Postgres 17 (¼ unit), edge network with DDoS protection + CDN + edge caching
@@ -30,7 +32,8 @@ Live: [chirper-master-ej8kbb.laravel.cloud](https://chirper-master-ej8kbb.larave
 
 | Area | Highlights |
 |------|-----------|
-| Auth | Register, login, email verification, password reset |
+| Auth | Register, login, email verification (Resend), password reset; logout gated by `verified` middleware — unverified accounts must confirm email before signing out |
+| Mail | Transactional mail via Resend (verification + password reset) |
 | Chirps | Create, edit (owner), delete, optional file attachment, like/dislike reactions |
 | Comments | Threaded under chirps, inline edit, owner delete, like/dislike |
 | Follow | Follow/unfollow users; counters on profile |
@@ -38,7 +41,7 @@ Live: [chirper-master-ej8kbb.laravel.cloud](https://chirper-master-ej8kbb.larave
 | Search | Find chirps and users by name/email/message with LIKE-wildcard escaping |
 | Command palette | `Ctrl/Cmd+K` opens a debounced live-suggest modal hitting `/search/suggest` for users + chirps, with "see all results" fallback |
 | Notifications | Database channel for new followers, comments, and likes; navbar bell with unread badge |
-| Access control | Home, search, and notifications gated behind `auth` + `verified` middleware |
+| Access control | Home, search, notifications, and logout gated behind `auth` + `verified` middleware |
 | Theme | Light/dark toggle (DaisyUI `theme-controller`) with `localStorage` + `prefers-color-scheme` |
 | UX polish | Live character counters on textareas, long-word wrapping, DaisyUI numbered pagination |
 
