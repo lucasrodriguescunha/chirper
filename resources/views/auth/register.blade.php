@@ -63,6 +63,10 @@
                         <div class="label -mt-4 mb-2">
                             <span class="label-text-alt text-error">{{ $message }}</span>
                         </div>
+                        @else
+                        <div class="label -mt-4 mb-2">
+                            <span class="label-text-alt text-base-content/60">Min 8 chars: upper + lower + number + symbol.</span>
+                        </div>
                         @enderror
 
                         <label class="floating-label mb-6">
