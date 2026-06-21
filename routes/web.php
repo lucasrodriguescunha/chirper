@@ -16,6 +16,7 @@ require __DIR__ . '/follows.php';
 require __DIR__ . '/users.php';
 require __DIR__ . '/search.php';
 require __DIR__ . '/notifications.php';
+require __DIR__ . '/two_factor.php';
 
 
 

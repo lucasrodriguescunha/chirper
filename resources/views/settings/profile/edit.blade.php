@@ -97,6 +97,17 @@
                         </button>
                     </div>
                 </form>
+
+                <div class="divider mt-6"></div>
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="font-semibold">Two-Factor Authentication</h2>
+                        <p class="text-sm text-base-content/60">
+                            {{ $user->hasTwoFactorEnabled() ? 'Enabled' : 'Not enabled' }}
+                        </p>
+                    </div>
+                    <a href="{{ route('settings.two-factor.index') }}" class="btn btn-outline btn-sm">Manage</a>
+                </div>
             </div>
         </div>
     </div>
