@@ -133,6 +133,8 @@
 
 /* Navbar = base-100 + hairline bottom */
 .navbar {
+    position: relative;
+    z-index: 40;
     background: var(--color-base-100);
     border-bottom: var(--border) solid var(--border-color-soft);
     backdrop-filter: saturate(140%) blur(6px);
