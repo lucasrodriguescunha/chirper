@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -114,5 +115,33 @@ class User extends Authenticatable implements MustVerifyEmail
     public function hasBookmarked(Chirp $chirp): bool
     {
         return $this->bookmarkedChirps()->whereKey($chirp->id)->exists();
+    }
+
+    public function bookmarksCount(): int
+    {
+        return Cache::remember(
+            "user:{$this->id}:bookmarks_count",
+            now()->addHour(),
+            fn () => $this->bookmarkedChirps()->count(),
+        );
+    }
+
+    public function unreadNotificationsCount(): int
+    {
+        return Cache::remember(
+            "user:{$this->id}:unread_notifications_count",
+            now()->addHour(),
+            fn () => $this->unreadNotifications()->count(),
+        );
+    }
+
+    public function forgetBookmarksCount(): void
+    {
+        Cache::forget("user:{$this->id}:bookmarks_count");
+    }
+
+    public function forgetUnreadNotificationsCount(): void
+    {
+        Cache::forget("user:{$this->id}:unread_notifications_count");
     }
 }

@@ -12,21 +12,26 @@ class NotificationController extends Controller
         $notifications = $user->notifications()->paginate(20);
 
         $user->unreadNotifications->markAsRead();
+        $user->forgetUnreadNotificationsCount();
 
         return view('notifications.index', ['notifications' => $notifications]);
     }
 
     public function destroy(Request $request, string $id)
     {
-        $notification = auth()->user()->notifications()->findOrFail($id);
+        $user = auth()->user();
+        $notification = $user->notifications()->findOrFail($id);
         $notification->delete();
+        $user->forgetUnreadNotificationsCount();
 
         return back()->with('success', 'Notification removed.');
     }
 
     public function clear()
     {
-        auth()->user()->notifications()->delete();
+        $user = auth()->user();
+        $user->notifications()->delete();
+        $user->forgetUnreadNotificationsCount();
 
         return back()->with('success', 'All notifications cleared.');
     }

@@ -63,8 +63,8 @@
     </div>
     @auth
         @if (auth()->user()->hasVerifiedEmail())
-            @php($__bookmarksCount = auth()->user()->bookmarkedChirps()->count())
-            @php($__unreadNotifications = auth()->user()->unreadNotifications()->count())
+            @php($__bookmarksCount = auth()->user()->bookmarksCount())
+            @php($__unreadNotifications = auth()->user()->unreadNotificationsCount())
         @endif
     @endauth
     <div class="navbar-end gap-1 sm:gap-3 px-2 sm:px-4">

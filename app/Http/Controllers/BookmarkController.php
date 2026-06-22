@@ -20,14 +20,18 @@ class BookmarkController extends Controller
 
     public function store(Chirp $chirp)
     {
-        auth()->user()->bookmarkedChirps()->syncWithoutDetaching([$chirp->id]);
+        $user = auth()->user();
+        $user->bookmarkedChirps()->syncWithoutDetaching([$chirp->id]);
+        $user->forgetBookmarksCount();
 
         return back()->with('success', 'Chirp saved to bookmarks.');
     }
 
     public function destroy(Chirp $chirp)
     {
-        auth()->user()->bookmarkedChirps()->detach($chirp->id);
+        $user = auth()->user();
+        $user->bookmarkedChirps()->detach($chirp->id);
+        $user->forgetBookmarksCount();
 
         return back()->with('success', 'Bookmark removed.');
     }
