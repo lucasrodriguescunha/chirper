@@ -1,5 +1,5 @@
 const dialog = document.getElementById('command-palette');
-const trigger = document.getElementById('command-palette-trigger');
+const triggers = document.querySelectorAll('.command-palette-trigger');
 const input = document.getElementById('command-palette-input');
 const results = document.getElementById('command-palette-results');
 
@@ -14,7 +14,7 @@ if (dialog && input && results) {
         if (dialog.open) dialog.close();
     };
 
-    if (trigger) trigger.addEventListener('click', open);
+    triggers.forEach((trigger) => trigger.addEventListener('click', open));
 
     document.addEventListener('keydown', (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {

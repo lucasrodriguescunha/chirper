@@ -4,8 +4,8 @@
     </x-slot:title>
 
     <div class="hero min-h-[calc(100vh-16rem)]">
-        <div class="hero-content flex-col">
-            <div class="card w-96 bg-base-100">
+        <div class="hero-content flex-col w-full px-4 sm:px-0">
+            <div class="card w-full max-w-sm bg-base-100">
                 <div class="card-body">
 
                     <h1 class="text-xl mt-1 font-bold text-center mb-6">Welcome Back</h1>

@@ -61,81 +61,170 @@
             </svg>
         </a>
     </div>
+    @auth
+        @if (auth()->user()->hasVerifiedEmail())
+            @php($__bookmarksCount = auth()->user()->bookmarkedChirps()->count())
+            @php($__unreadNotifications = auth()->user()->unreadNotifications()->count())
+        @endif
+    @endauth
     <div class="navbar-end gap-1 sm:gap-3 px-2 sm:px-4">
-        @auth
-            @if (auth()->user()->hasVerifiedEmail())
-                <button
-                    type="button"
-                    id="command-palette-trigger"
-                    class="btn btn-ghost gap-2 normal-case font-normal text-base-content/60 border border-base-300 hover:border-base-content/20"
-                    aria-label="Open search"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
-                    </svg>
-                    <span class="hidden sm:inline">Search...</span>
-                    <kbd class="kbd kbd-sm hidden md:inline-flex items-center justify-center leading-none">Ctrl</kbd>
-                    <kbd class="kbd kbd-sm hidden md:inline-flex items-center justify-center leading-none">K</kbd>
-                </button>
-            @endif
-        @endauth
-        <button type="button" id="theme-toggle" class="btn btn-ghost" aria-label="Toggle theme" title="Toggle theme">
-            <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0-1.414-1.414M7.05 7.05 5.636 5.636M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/>
-            </svg>
-            <svg id="theme-icon-moon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>
-            </svg>
-        </button>
-        @auth
-            @if (auth()->user()->hasVerifiedEmail())
-                @php($__bookmarksCount = auth()->user()->bookmarkedChirps()->count())
-                <a href="{{ route('bookmarks.index') }}" class="btn btn-ghost relative" aria-label="Bookmarks" title="Bookmarks">
-                    <x-ri-bookmark-line class="w-5 h-5"/>
-                    @if ($__bookmarksCount > 0)
-                        <span class="badge badge-primary badge-sm absolute -top-1 -right-1">{{ $__bookmarksCount > 99 ? '99+' : $__bookmarksCount }}</span>
-                    @endif
-                </a>
-                @php($__unreadNotifications = auth()->user()->unreadNotifications()->count())
-                <a href="{{ route('notifications.index') }}" class="btn btn-ghost relative" aria-label="Notifications" title="Notifications">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-                    </svg>
-                    @if ($__unreadNotifications > 0)
-                        <span class="badge badge-error badge-sm absolute -top-1 -right-1">{{ $__unreadNotifications > 99 ? '99+' : $__unreadNotifications }}</span>
-                    @endif
-                </a>
-            @endif
-            <div class="dropdown dropdown-end">
-                <div tabindex="0" role="button" class="btn btn-ghost gap-2 px-2" aria-label="Account menu">
-                    <div class="avatar">
-                        <div class="w-8 rounded-full">
-                            <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->name }}" class="object-cover w-full h-full"/>
+        {{-- Desktop nav: visible from lg up --}}
+        <div class="hidden lg:flex items-center gap-1 sm:gap-3">
+            @auth
+                @if (auth()->user()->hasVerifiedEmail())
+                    <button
+                        type="button"
+                        class="command-palette-trigger btn btn-ghost gap-2 normal-case font-normal text-base-content/60 border border-base-300 hover:border-base-content/20"
+                        aria-label="Open search"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+                        </svg>
+                        <span class="hidden sm:inline">Search...</span>
+                        <kbd class="kbd kbd-sm hidden md:inline-flex items-center justify-center leading-none">Ctrl</kbd>
+                        <kbd class="kbd kbd-sm hidden md:inline-flex items-center justify-center leading-none">K</kbd>
+                    </button>
+                @endif
+            @endauth
+            <button type="button" class="theme-toggle btn btn-ghost" aria-label="Toggle theme" title="Toggle theme">
+                <svg class="theme-icon-sun h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0-1.414-1.414M7.05 7.05 5.636 5.636M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/>
+                </svg>
+                <svg class="theme-icon-moon h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>
+                </svg>
+            </button>
+            @auth
+                @if (auth()->user()->hasVerifiedEmail())
+                    <a href="{{ route('bookmarks.index') }}" class="btn btn-ghost relative" aria-label="Bookmarks" title="Bookmarks">
+                        <x-ri-bookmark-line class="w-5 h-5"/>
+                        @if ($__bookmarksCount > 0)
+                            <span class="badge badge-primary badge-sm absolute -top-1 -right-1">{{ $__bookmarksCount > 99 ? '99+' : $__bookmarksCount }}</span>
+                        @endif
+                    </a>
+                    <a href="{{ route('notifications.index') }}" class="btn btn-ghost relative" aria-label="Notifications" title="Notifications">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                        </svg>
+                        @if ($__unreadNotifications > 0)
+                            <span class="badge badge-error badge-sm absolute -top-1 -right-1">{{ $__unreadNotifications > 99 ? '99+' : $__unreadNotifications }}</span>
+                        @endif
+                    </a>
+                @endif
+                <div class="dropdown dropdown-end">
+                    <div tabindex="0" role="button" class="btn btn-ghost gap-2 px-2" aria-label="Account menu">
+                        <div class="avatar">
+                            <div class="w-8 rounded-full">
+                                <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->name }}" class="object-cover w-full h-full"/>
+                            </div>
                         </div>
+                        <span class="hidden sm:inline text-sm">{{ auth()->user()->name }}</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                        </svg>
                     </div>
-                    <span class="hidden sm:inline text-sm">{{ auth()->user()->name }}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                    </svg>
+                    <ul tabindex="0" class="dropdown-content menu z-1 mt-3 w-52 rounded-box bg-base-100 p-2 shadow">
+                        @if (auth()->user()->hasVerifiedEmail())
+                            <li><a href="{{ route('settings.profile.edit') }}">Profile</a></li>
+                            <li>
+                                <form method="POST" action="/logout">
+                                    @csrf
+                                    <button type="submit" class="text-error">Logout</button>
+                                </form>
+                            </li>
+                        @else
+                            <li><a href="{{ route('verification.notice') }}">Verify email</a></li>
+                        @endif
+                    </ul>
                 </div>
-                <ul tabindex="0" class="dropdown-content menu z-1 mt-3 w-52 rounded-box bg-base-100 p-2 shadow">
+            @else
+                <a href="/login" class="btn btn-ghost">Sign In</a>
+                <a href="/register" class="btn btn-primary">Sign Up</a>
+            @endauth
+        </div>
+
+        {{-- Mobile/tablet nav: hamburger dropdown below lg --}}
+        <div class="dropdown dropdown-end lg:hidden">
+            <div tabindex="0" role="button" class="btn btn-ghost" aria-label="Open menu">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </div>
+            <ul tabindex="0" class="dropdown-content menu z-10 mt-3 w-60 rounded-box bg-base-100 p-2 shadow">
+                @auth
+                    @if (auth()->user()->hasVerifiedEmail())
+                        <li>
+                            <button type="button" class="command-palette-trigger">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+                                </svg>
+                                Search
+                            </button>
+                        </li>
+                        <li>
+                            <a href="{{ route('bookmarks.index') }}" class="justify-between">
+                                <span class="flex items-center gap-2">
+                                    <x-ri-bookmark-line class="w-5 h-5"/>
+                                    Bookmarks
+                                </span>
+                                @if ($__bookmarksCount > 0)
+                                    <span class="badge badge-primary badge-sm">{{ $__bookmarksCount > 99 ? '99+' : $__bookmarksCount }}</span>
+                                @endif
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('notifications.index') }}" class="justify-between">
+                                <span class="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                                    </svg>
+                                    Notifications
+                                </span>
+                                @if ($__unreadNotifications > 0)
+                                    <span class="badge badge-error badge-sm">{{ $__unreadNotifications > 99 ? '99+' : $__unreadNotifications }}</span>
+                                @endif
+                            </a>
+                        </li>
+                    @endif
+                    <li>
+                        <button type="button" class="theme-toggle">
+                            <svg class="theme-icon-sun h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0-1.414-1.414M7.05 7.05 5.636 5.636M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/>
+                            </svg>
+                            <svg class="theme-icon-moon h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>
+                            </svg>
+                            Toggle theme
+                        </button>
+                    </li>
                     @if (auth()->user()->hasVerifiedEmail())
                         <li><a href="{{ route('settings.profile.edit') }}">Profile</a></li>
                         <li>
                             <form method="POST" action="/logout">
                                 @csrf
-                                <button type="submit" class="text-error">Logout</button>
+                                <button type="submit" class="text-error w-full text-left">Logout</button>
                             </form>
                         </li>
                     @else
                         <li><a href="{{ route('verification.notice') }}">Verify email</a></li>
                     @endif
-                </ul>
-            </div>
-        @else
-            <a href="/login" class="btn btn-ghost">Sign In</a>
-            <a href="/register" class="btn btn-primary">Sign Up</a>
-        @endauth
+                @else
+                    <li>
+                        <button type="button" class="theme-toggle">
+                            <svg class="theme-icon-sun h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0-1.414-1.414M7.05 7.05 5.636 5.636M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/>
+                            </svg>
+                            <svg class="theme-icon-moon h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>
+                            </svg>
+                            Toggle theme
+                        </button>
+                    </li>
+                    <li><a href="/login">Sign In</a></li>
+                    <li><a href="/register" class="text-primary">Sign Up</a></li>
+                @endauth
+            </ul>
+        </div>
     </div>
 </nav>
 
@@ -201,23 +290,25 @@
 
 <script>
     (function () {
-        var btn = document.getElementById('theme-toggle');
-        if (!btn) return;
-        var sun = document.getElementById('theme-icon-sun');
-        var moon = document.getElementById('theme-icon-moon');
+        var btns = document.querySelectorAll('.theme-toggle');
+        if (!btns.length) return;
+        var suns = document.querySelectorAll('.theme-icon-sun');
+        var moons = document.querySelectorAll('.theme-icon-moon');
         function sync() {
             var t = document.documentElement.getAttribute('data-theme');
             var dark = t === 'laravelChirperDark';
-            sun.classList.toggle('hidden', !dark);
-            moon.classList.toggle('hidden', dark);
+            suns.forEach(function (el) { el.classList.toggle('hidden', !dark); });
+            moons.forEach(function (el) { el.classList.toggle('hidden', dark); });
         }
         sync();
-        btn.addEventListener('click', function () {
-            var cur = document.documentElement.getAttribute('data-theme');
-            var next = cur === 'laravelChirperDark' ? 'laravelChirper' : 'laravelChirperDark';
-            document.documentElement.setAttribute('data-theme', next);
-            try { localStorage.setItem('theme', next); } catch (e) {}
-            sync();
+        btns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var cur = document.documentElement.getAttribute('data-theme');
+                var next = cur === 'laravelChirperDark' ? 'laravelChirper' : 'laravelChirperDark';
+                document.documentElement.setAttribute('data-theme', next);
+                try { localStorage.setItem('theme', next); } catch (e) {}
+                sync();
+            });
         });
     })();
 
