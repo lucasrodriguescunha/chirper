@@ -89,8 +89,12 @@
         </button>
         @auth
             @if (auth()->user()->hasVerifiedEmail())
-                <a href="{{ route('bookmarks.index') }}" class="btn btn-ghost" aria-label="Bookmarks" title="Bookmarks">
+                @php($__bookmarksCount = auth()->user()->bookmarkedChirps()->count())
+                <a href="{{ route('bookmarks.index') }}" class="btn btn-ghost relative" aria-label="Bookmarks" title="Bookmarks">
                     <x-ri-bookmark-line class="w-5 h-5"/>
+                    @if ($__bookmarksCount > 0)
+                        <span class="badge badge-primary badge-sm absolute -top-1 -right-1">{{ $__bookmarksCount > 99 ? '99+' : $__bookmarksCount }}</span>
+                    @endif
                 </a>
                 @php($__unreadNotifications = auth()->user()->unreadNotifications()->count())
                 <a href="{{ route('notifications.index') }}" class="btn btn-ghost relative" aria-label="Notifications" title="Notifications">
