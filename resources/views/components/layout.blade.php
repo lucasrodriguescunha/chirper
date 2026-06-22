@@ -89,6 +89,9 @@
         </button>
         @auth
             @if (auth()->user()->hasVerifiedEmail())
+                <a href="{{ route('bookmarks.index') }}" class="btn btn-ghost" aria-label="Bookmarks" title="Bookmarks">
+                    <x-ri-bookmark-line class="w-5 h-5"/>
+                </a>
                 @php($__unreadNotifications = auth()->user()->unreadNotifications()->count())
                 <a href="{{ route('notifications.index') }}" class="btn btn-ghost relative" aria-label="Notifications" title="Notifications">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

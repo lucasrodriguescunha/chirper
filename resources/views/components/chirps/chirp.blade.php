@@ -105,6 +105,31 @@
                         <x-ri-thumb-down-line class="w-5 h-5"/>
                         <span>{{ $chirp->likes->where('type', 'dislike')->count() }}</span>
                     </button>
+
+                    @auth
+                        @php
+                            $isBookmarked = $chirp->relationLoaded('bookmarks')
+                                ? $chirp->bookmarks->contains('user_id', auth()->id())
+                                : auth()->user()->hasBookmarked($chirp);
+                        @endphp
+
+                        @if ($isBookmarked)
+                            <form method="POST" action="{{ route('bookmarks.destroy', $chirp) }}" class="ml-auto">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="hover:scale-110 transition text-primary" aria-label="Remove bookmark" title="Remove bookmark">
+                                    <x-ri-bookmark-fill class="w-5 h-5"/>
+                                </button>
+                            </form>
+                        @else
+                            <form method="POST" action="{{ route('bookmarks.store', $chirp) }}" class="ml-auto">
+                                @csrf
+                                <button type="submit" class="hover:scale-110 transition" aria-label="Save chirp" title="Save chirp">
+                                    <x-ri-bookmark-line class="w-5 h-5"/>
+                                </button>
+                            </form>
+                        @endif
+                    @endauth
                 </div>
 
                 <x-chirps.comments :chirp="$chirp" />

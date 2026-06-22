@@ -15,7 +15,7 @@ class ChirpController extends Controller
 
     public function index()
     {
-        $chirps = Chirp::with(['user', 'attachments', 'likes', 'comments.user', 'comments.likes'])
+        $chirps = Chirp::with(['user', 'attachments', 'likes', 'comments.user', 'comments.likes', 'bookmarks'])
             ->latest()
             ->paginate(10)
             ->withQueryString();

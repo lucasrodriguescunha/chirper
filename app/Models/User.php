@@ -104,4 +104,15 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->following()->whereKey($user->id)->exists();
     }
+
+    public function bookmarkedChirps(): BelongsToMany
+    {
+        return $this->belongsToMany(Chirp::class, 'bookmarks')
+            ->withTimestamps();
+    }
+
+    public function hasBookmarked(Chirp $chirp): bool
+    {
+        return $this->bookmarkedChirps()->whereKey($chirp->id)->exists();
+    }
 }
