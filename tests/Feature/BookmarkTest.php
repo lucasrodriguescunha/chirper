@@ -63,6 +63,31 @@ it('shows the bookmarked chirps on the index page', function () {
     $response->assertDontSee('not saved');
 });
 
+it('lets the owner bookmark their own chirp', function () {
+    $chirp = Chirp::factory()->for($this->user)->create();
+
+    $response = $this->actingAs($this->user)->post(route('bookmarks.store', $chirp));
+
+    $response->assertRedirect();
+    $this->assertDatabaseHas('bookmarks', [
+        'user_id' => $this->user->id,
+        'chirp_id' => $chirp->id,
+    ]);
+});
+
+it('removes a bookmark without deleting the chirp', function () {
+    $chirp = Chirp::factory()->for($this->user)->create();
+    $this->user->bookmarkedChirps()->attach($chirp);
+
+    $this->actingAs($this->user)->delete(route('bookmarks.destroy', $chirp));
+
+    $this->assertDatabaseMissing('bookmarks', [
+        'user_id' => $this->user->id,
+        'chirp_id' => $chirp->id,
+    ]);
+    expect(Chirp::find($chirp->id))->not->toBeNull();
+});
+
 it('cascade-deletes bookmarks when chirp deleted', function () {
     $chirp = Chirp::factory()->create();
     $this->user->bookmarkedChirps()->attach($chirp);
