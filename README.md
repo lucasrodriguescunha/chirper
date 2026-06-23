@@ -40,6 +40,7 @@ Live: [chirper-master-ej8kbb.laravel.cloud](https://chirper-master-ej8kbb.larave
 | Chirps | Create, edit (owner), delete, image-only attachment (`jpg/jpeg/png/webp/gif`, ≤ 2 MB), like/dislike reactions |
 | Feed | Twitter-style tabs on `/`: "For you" (all chirps) vs "Following" (chirps from followed users + self); selection survives pagination via `?feed=following`; empty Following state links to search to discover users |
 | Mentions | `@username` mentions parsed from chirp body (3–30 chars, `[A-Za-z0-9_]`); resolved handles render as profile links, unknown handles stay as plain text, HTML escaped first to keep rendering XSS-safe; mentioned users receive a `NewMentionNotification` on create; edits only notify *newly added* mentions (no re-notify on minor edits); self-mentions silent |
+| Hashtags | `#tag` parsed from chirp body; clickable hashtags link to per-tag listing at `/tag/{slug}`; tag page shows all chirps containing that hashtag; multiple tags per chirp supported |
 | Comments | Threaded under chirps, inline edit, owner delete, like/dislike |
 | Follow | Follow/unfollow users; counters on profile |
 | Profile | Public `/users/{user}` page with avatar, bio, chirp list, follower counters |
@@ -58,8 +59,8 @@ Live: [chirper-master-ej8kbb.laravel.cloud](https://chirper-master-ej8kbb.larave
 
 ```
 app/
-  Http/Controllers/      Chirp, Comment, Follow, Like, Notification, Search, User, Bookmark
-  Notifications/         NewFollower, NewComment, NewLike (database channel)
+  Http/Controllers/      Chirp, Comment, Follow, Like, Notification, Search, User, Bookmark, Tag
+  Notifications/         NewFollower, NewComment, NewLike, NewMention (database channel)
   Models/                User, Chirp, Comment, Like, Follow, ChirpAttachment, Bookmark
 database/migrations/     Users, chirps, likes, comments, follows, notifications, bookmarks, ...
 resources/
@@ -67,8 +68,8 @@ resources/
   js/                    charCounter, commentEdit, userReaction, sendChirpAttachment, commandPalette
   css/app.css            laravelChirper + laravelChirperDark DaisyUI themes
 routes/                  Split per resource: web, auth, chirps, comments, follows,
-                         users, search, notifications, bookmarks, two_factor,
-                         password, profile, verification
+                         users, search, notifications, bookmarks, tags,
+                         two_factor, password, profile, verification
 tests/Feature/           Pest feature tests (auth, chirps, comments, follows, ...)
 tests/e2e/               Playwright specs + global-setup + helpers
 app/Console/Commands/    E2eResetCommand (php artisan e2e:reset)
