@@ -34,18 +34,19 @@ Live: [chirper-master-ej8kbb.laravel.cloud](https://chirper-master-ej8kbb.larave
 
 | Area | Highlights |
 |------|-----------|
-| Auth | Register, login, email verification (Resend), password reset; strong password policy via `Password::defaults()`; Cloudflare Turnstile CAPTCHA on login/register; logout gated by `verified` middleware — unverified accounts must confirm email before signing out |
+| Auth | Register (with unique `username`, 3–30 chars, `[A-Za-z0-9_]`), login, email verification (Resend), password reset; strong password policy via `Password::defaults()`; Cloudflare Turnstile CAPTCHA on login/register; logout gated by `verified` middleware — unverified accounts must confirm email before signing out |
 | Two-factor auth | TOTP enrollment with QR code at `/settings/two-factor`, single-use recovery codes (regenerable behind `current_password`), guest-only `/two-factor-challenge` after login, throttled 6/min |
 | Mail | Transactional mail via Resend (verification + password reset) |
 | Chirps | Create, edit (owner), delete, image-only attachment (`jpg/jpeg/png/webp/gif`, ≤ 2 MB), like/dislike reactions |
 | Feed | Twitter-style tabs on `/`: "For you" (all chirps) vs "Following" (chirps from followed users + self); selection survives pagination via `?feed=following`; empty Following state links to search to discover users |
+| Mentions | `@username` mentions parsed from chirp body (3–30 chars, `[A-Za-z0-9_]`); resolved handles render as profile links, unknown handles stay as plain text, HTML escaped first to keep rendering XSS-safe; mentioned users receive a `NewMentionNotification` on create; edits only notify *newly added* mentions (no re-notify on minor edits); self-mentions silent |
 | Comments | Threaded under chirps, inline edit, owner delete, like/dislike |
 | Follow | Follow/unfollow users; counters on profile |
 | Profile | Public `/users/{user}` page with avatar, bio, chirp list, follower counters |
 | Search | Find chirps and users by name/email/message with LIKE-wildcard escaping |
 | Command palette | `Ctrl/Cmd+K` opens a debounced live-suggest modal hitting `/search/suggest` for users + chirps, with "see all results" fallback |
 | Bookmarks | Save chirps for later via per-card toggle; dedicated `/bookmarks` index; navbar bookmark icon shows saved-count badge (cached per user); removing a bookmark leaves the chirp untouched |
-| Notifications | Database channel for new followers, comments, and likes; navbar bell with unread badge (cached per user); per-item delete and "Clear all" |
+| Notifications | Database channel for new followers, comments, likes, and `@`-mentions; navbar bell with unread badge (cached per user); per-item delete and "Clear all" |
 | Access control | Home, search, notifications, bookmarks, settings, and logout gated behind `auth` + `verified` middleware |
 | Rate limiting | Per-route throttles: register `5/min`, password reset `6/min`, verification resend `6/min`, 2FA challenge `6/min`, chirp/comment create `20/min`, reactions `60/min`; login limited to 3 attempts per 15 min per `email+IP` |
 | Security headers | CSP, HSTS (prod), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`, COOP/CORP cross-origin isolation; HTTPS enforced in production |
@@ -136,11 +137,12 @@ editing.
 
 ## Notifications
 
-Three notification types are dispatched on the `database` channel:
+Four notification types are dispatched on the `database` channel:
 
 - `NewFollowerNotification` — sent on first follow (no spam on repeat clicks)
 - `NewCommentNotification` — sent to chirp owner when a different user comments
 - `NewLikeNotification` — sent to chirp owner on new reaction or reaction type change; self-reactions are silent
+- `NewMentionNotification` — sent to each user `@`-mentioned in a chirp; self-mentions are silent; edits only notify *newly added* mentions (diff against the original message)
 
 The navbar bell shows unread count; visiting `/notifications` marks everything read.
 

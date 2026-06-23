@@ -24,6 +24,7 @@ class E2eResetCommand extends Command
 
         $alice = new User([
             'name' => 'Alice E2E',
+            'username' => 'alice',
             'email' => 'alice@e2e.test',
             'password' => Hash::make('password123'),
             'bio' => 'Hi, I am Alice.',
@@ -33,6 +34,7 @@ class E2eResetCommand extends Command
 
         $bob = new User([
             'name' => 'Bob E2E',
+            'username' => 'bob',
             'email' => 'bob@e2e.test',
             'password' => Hash::make('password123'),
             'bio' => 'Hi, I am Bob.',

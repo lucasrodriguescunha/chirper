@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Hash;
 it('registers a new user and logs them in', function () {
     $response = $this->post('/register', [
         'name' => 'Alice',
+        'username' => 'alice',
         'email' => 'alice@example.com',
         'password' => 'Secret-Pass1!',
         'password_confirmation' => 'Secret-Pass1!',
@@ -16,9 +17,47 @@ it('registers a new user and logs them in', function () {
     $user = User::where('email', 'alice@example.com')->first();
     expect($user)->not->toBeNull()
         ->and($user->name)->toBe('Alice')
+        ->and($user->username)->toBe('alice')
         ->and(Hash::check('Secret-Pass1!', $user->password))->toBeTrue();
 
     $this->assertAuthenticatedAs($user);
+});
+
+it('rejects registration without a username', function () {
+    $response = $this->post('/register', [
+        'name' => 'Alice',
+        'email' => 'alice@example.com',
+        'password' => 'Secret-Pass1!',
+        'password_confirmation' => 'Secret-Pass1!',
+    ]);
+
+    $response->assertSessionHasErrors('username');
+});
+
+it('rejects registration with invalid username characters', function () {
+    $response = $this->post('/register', [
+        'name' => 'Alice',
+        'username' => 'has space',
+        'email' => 'alice@example.com',
+        'password' => 'Secret-Pass1!',
+        'password_confirmation' => 'Secret-Pass1!',
+    ]);
+
+    $response->assertSessionHasErrors('username');
+});
+
+it('rejects registration when username already exists', function () {
+    User::factory()->create(['username' => 'taken']);
+
+    $response = $this->post('/register', [
+        'name' => 'Carl',
+        'username' => 'taken',
+        'email' => 'carl@example.com',
+        'password' => 'Secret-Pass1!',
+        'password_confirmation' => 'Secret-Pass1!',
+    ]);
+
+    $response->assertSessionHasErrors('username');
 });
 
 it('rejects registration with mismatched password confirmation', function () {

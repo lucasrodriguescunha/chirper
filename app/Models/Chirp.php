@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,6 +13,8 @@ class Chirp extends Model
 {
     use HasFactory;
 
+    public const MENTION_REGEX = '/(?<![\w@])@([A-Za-z0-9_]{3,30})\b/';
+
     protected $fillable = [
         'message',
         'file_path',
@@ -19,6 +22,26 @@ class Chirp extends Model
         'path',
         'type'
     ];
+
+    public function mentionedUsernames(): array
+    {
+        preg_match_all(self::MENTION_REGEX, (string) $this->message, $matches);
+
+        return array_values(array_unique(array_map('strtolower', $matches[1] ?? [])));
+    }
+
+    public function mentionedUsers(): Collection
+    {
+        $usernames = $this->mentionedUsernames();
+
+        if (empty($usernames)) {
+            return User::query()->whereRaw('1 = 0')->get();
+        }
+
+        return User::query()
+            ->whereIn('username', $usernames)
+            ->get();
+    }
 
     public function user(): BelongsTo
     {

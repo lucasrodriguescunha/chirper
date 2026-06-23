@@ -30,6 +30,25 @@
 
                         <label class="floating-label mb-4">
                             <input
+                                type="text"
+                                name="username"
+                                placeholder="johndoe"
+                                value="{{ old('username') }}"
+                                class="input input-bordered @error('username') input-error @enderror"
+                                pattern="[A-Za-z0-9_]+"
+                                minlength="3"
+                                maxlength="30"
+                                required
+                            >
+                            <span>Username</span>
+                        </label>
+
+                        @error('username')
+                            <x-alert type="error" size="sm" soft class="mb-4">{{ $message }}</x-alert>
+                        @enderror
+
+                        <label class="floating-label mb-4">
+                            <input
                                 type="email"
                                 name="email"
                                 placeholder="mail@example.com"

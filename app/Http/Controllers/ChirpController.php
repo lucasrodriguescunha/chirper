@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\StoreChirpAttachmentAction;
 use App\Http\Requests\ChirpRequest;
 use App\Models\Chirp;
+use App\Notifications\NewMentionNotification;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -59,6 +60,8 @@ class ChirpController extends Controller
             // throw new \Exception('Forced error to test rollback!');
 
             DB::commit();
+
+            $this->notifyMentions($chirp, []);
         } catch (Throwable) {
             DB::rollBack();
 
@@ -90,9 +93,32 @@ class ChirpController extends Controller
     {
         $this->authorize('update', $chirp);
 
+        $previousMentions = $chirp->mentionedUsernames();
+
         $chirp->update($request->validated());
 
+        $this->notifyMentions($chirp->fresh(), $previousMentions);
+
         return redirect('/')->with('success', 'Your chirp has been updated!');
+    }
+
+    private function notifyMentions(Chirp $chirp, array $previousUsernames): void
+    {
+        $current = $chirp->mentionedUsernames();
+        $new = array_values(array_diff($current, $previousUsernames));
+
+        if (empty($new)) {
+            return;
+        }
+
+        $users = \App\Models\User::query()
+            ->whereIn('username', $new)
+            ->where('id', '!=', $chirp->user_id)
+            ->get();
+
+        foreach ($users as $user) {
+            $user->notify(new NewMentionNotification($chirp->user, $chirp));
+        }
     }
 
     public function destroy(Chirp $chirp)
