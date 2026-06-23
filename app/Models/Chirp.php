@@ -15,6 +15,8 @@ class Chirp extends Model
 
     public const MENTION_REGEX = '/(?<![\w@])@([A-Za-z0-9_]{3,30})\b/';
 
+    public const HASHTAG_REGEX = '/(?<![\w&])#([A-Za-z0-9_]{2,50})\b/';
+
     protected $fillable = [
         'message',
         'file_path',
@@ -69,5 +71,33 @@ class Chirp extends Model
     public function bookmarks(): HasMany
     {
         return $this->hasMany(Bookmark::class);
+    }
+
+    public function tags(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class, 'chirp_tag')->withTimestamps();
+    }
+
+    public function extractHashtags(): array
+    {
+        preg_match_all(self::HASHTAG_REGEX, (string) $this->message, $matches);
+
+        return array_values(array_unique(array_map('strtolower', $matches[1] ?? [])));
+    }
+
+    public function syncTagsFromMessage(): void
+    {
+        $names = $this->extractHashtags();
+
+        if (empty($names)) {
+            $this->tags()->sync([]);
+            return;
+        }
+
+        $ids = collect($names)
+            ->map(fn ($name) => Tag::firstOrCreate(['name' => $name])->id)
+            ->all();
+
+        $this->tags()->sync($ids);
     }
 }

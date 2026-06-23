@@ -18,6 +18,7 @@ require __DIR__ . '/search.php';
 require __DIR__ . '/notifications.php';
 require __DIR__ . '/two_factor.php';
 require __DIR__ . '/bookmarks.php';
+require __DIR__ . '/tags.php';
 
 
 

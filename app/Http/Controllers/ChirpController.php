@@ -61,6 +61,7 @@ class ChirpController extends Controller
 
             DB::commit();
 
+            $chirp->syncTagsFromMessage();
             $this->notifyMentions($chirp, []);
         } catch (Throwable) {
             DB::rollBack();
@@ -97,7 +98,9 @@ class ChirpController extends Controller
 
         $chirp->update($request->validated());
 
-        $this->notifyMentions($chirp->fresh(), $previousMentions);
+        $fresh = $chirp->fresh();
+        $fresh->syncTagsFromMessage();
+        $this->notifyMentions($fresh, $previousMentions);
 
         return redirect('/')->with('success', 'Your chirp has been updated!');
     }
