@@ -43,28 +43,30 @@ Live: [chirper-master-ej8kbb.laravel.cloud](https://chirper-master-ej8kbb.larave
 | Profile | Public `/users/{user}` page with avatar, bio, chirp list, follower counters |
 | Search | Find chirps and users by name/email/message with LIKE-wildcard escaping |
 | Command palette | `Ctrl/Cmd+K` opens a debounced live-suggest modal hitting `/search/suggest` for users + chirps, with "see all results" fallback |
-| Notifications | Database channel for new followers, comments, and likes; navbar bell with unread badge; per-item delete and "Clear all" |
-| Access control | Home, search, notifications, settings, and logout gated behind `auth` + `verified` middleware |
+| Bookmarks | Save chirps for later via per-card toggle; dedicated `/bookmarks` index; navbar bookmark icon shows saved-count badge (cached per user); removing a bookmark leaves the chirp untouched |
+| Notifications | Database channel for new followers, comments, and likes; navbar bell with unread badge (cached per user); per-item delete and "Clear all" |
+| Access control | Home, search, notifications, bookmarks, settings, and logout gated behind `auth` + `verified` middleware |
 | Rate limiting | Per-route throttles: register `5/min`, password reset `6/min`, verification resend `6/min`, 2FA challenge `6/min`, chirp/comment create `20/min`, reactions `60/min`; login limited to 3 attempts per 15 min per `email+IP` |
 | Security headers | CSP, HSTS (prod), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`, COOP/CORP cross-origin isolation; HTTPS enforced in production |
 | Hardening | Boot aborts when `APP_DEBUG=true` under `APP_ENV=production` to prevent accidental stack-trace leaks |
 | Theme | Light/dark toggle (DaisyUI `theme-controller`) with `localStorage` + `prefers-color-scheme`, applied inline before paint to avoid flashes |
-| UX polish | Mobile-first responsive layout (DaisyUI utilities), unified `x-alert` component for flash + validation messages, live character counters on textareas, long-word wrapping, DaisyUI numbered pagination |
+| UX polish | Mobile-first responsive layout (DaisyUI utilities), navbar collapses into a hamburger dropdown on mobile/tablet, unified `x-alert` component for flash + validation messages, live character counters on textareas, long-word wrapping, DaisyUI numbered pagination (hidden when results fit one page) |
 
 ## Project layout
 
 ```
 app/
-  Http/Controllers/      Chirp, Comment, Follow, Like, Notification, Search, User
+  Http/Controllers/      Chirp, Comment, Follow, Like, Notification, Search, User, Bookmark
   Notifications/         NewFollower, NewComment, NewLike (database channel)
-  Models/                User, Chirp, Comment, Like, Follow, ChirpAttachment
-database/migrations/     Users, chirps, likes, comments, follows, notifications, ...
+  Models/                User, Chirp, Comment, Like, Follow, ChirpAttachment, Bookmark
+database/migrations/     Users, chirps, likes, comments, follows, notifications, bookmarks, ...
 resources/
   views/                 Blade pages + chirps/comments components
   js/                    charCounter, commentEdit, userReaction, sendChirpAttachment, commandPalette
   css/app.css            laravelChirper + laravelChirperDark DaisyUI themes
 routes/                  Split per resource: web, auth, chirps, comments, follows,
-                         users, search, notifications, password, profile, verification
+                         users, search, notifications, bookmarks, two_factor,
+                         password, profile, verification
 tests/Feature/           Pest feature tests (auth, chirps, comments, follows, ...)
 tests/e2e/               Playwright specs + global-setup + helpers
 app/Console/Commands/    E2eResetCommand (php artisan e2e:reset)
@@ -126,8 +128,10 @@ report is available with:
 npx playwright show-report
 ```
 
-Suites cover auth, chirps CRUD + reactions, comments CRUD + reactions,
-follow/unfollow, navbar and dedicated search, and profile editing.
+Suites cover auth (including two-factor), chirps CRUD + reactions,
+comments CRUD + reactions, follow/unfollow, navbar and dedicated search,
+bookmarks, notifications, password reset, theme toggle, and profile
+editing.
 
 ## Notifications
 
