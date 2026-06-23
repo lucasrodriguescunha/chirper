@@ -66,3 +66,12 @@ it('logs out an authenticated user', function () {
     $response->assertRedirect('/');
     $this->assertGuest();
 });
+
+it('blocks logout for an unverified user', function () {
+    $user = User::factory()->unverified()->create();
+
+    $response = $this->actingAs($user)->post('/logout');
+
+    $response->assertRedirect(route('verification.notice'));
+    $this->assertAuthenticatedAs($user);
+});

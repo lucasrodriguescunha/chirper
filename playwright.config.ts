@@ -22,5 +22,6 @@ export default defineConfig({
     url: 'http://127.0.0.1:8000',
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,
+    env: { MAIL_MAILER: 'log', DEBUGBAR_ENABLED: 'false' },
   },
 });

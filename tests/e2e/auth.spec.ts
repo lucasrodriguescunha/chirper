@@ -7,8 +7,8 @@ test.describe('Authentication', () => {
     const form = page.locator('form[action="/register"]');
     await form.locator('input[name="name"]').fill(`Carol ${unique}`);
     await form.locator('input[name="email"]').fill(`carol+${unique}@e2e.test`);
-    await form.locator('input[name="password"]').fill('password123');
-    await form.locator('input[name="password_confirmation"]').fill('password123');
+    await form.locator('input[name="password"]').fill('StrongP@ss123');
+    await form.locator('input[name="password_confirmation"]').fill('StrongP@ss123');
     await form.locator('button[type="submit"]').click();
     await expect(page).not.toHaveURL(/register/);
   });
@@ -36,5 +36,29 @@ test.describe('Authentication', () => {
   test('forgot password page renders', async ({ page }) => {
     await page.goto('/forgot-password');
     await expect(page.locator('input[name="email"]')).toBeVisible();
+  });
+
+  test('register rejects invalid email and short password', async ({ page }) => {
+    await page.goto('/register');
+    const form = page.locator('form[action="/register"]');
+    await form.locator('input[name="name"]').fill('Bad Inputs');
+    await form.locator('input[name="email"]').fill('not-an-email');
+    await form.locator('input[name="password"]').fill('123');
+    await form.locator('input[name="password_confirmation"]').fill('123');
+    await form.locator('button[type="submit"]').click();
+    await expect(page).toHaveURL(/register/);
+    await expect(page.getByText(/email/i).first()).toBeVisible();
+  });
+
+  test('register requires matching password confirmation', async ({ page }) => {
+    const unique = Date.now();
+    await page.goto('/register');
+    const form = page.locator('form[action="/register"]');
+    await form.locator('input[name="name"]').fill('Mismatch User');
+    await form.locator('input[name="email"]').fill(`mismatch+${unique}@e2e.test`);
+    await form.locator('input[name="password"]').fill('StrongP@ss123');
+    await form.locator('input[name="password_confirmation"]').fill('DifferentP@ss123');
+    await form.locator('button[type="submit"]').click();
+    await expect(page).toHaveURL(/register/);
   });
 });

@@ -17,7 +17,9 @@ export async function login(page: Page, creds: { email: string; password: string
 }
 
 export async function logout(page: Page) {
-  await page.locator('form[action="/logout"] button[type="submit"]').click();
+  await page.locator('nav [aria-label="Account menu"]').click();
+  await page.locator('form[action="/logout"] button[type="submit"]').first().click({ force: true });
+  await expect(page.getByRole('link', { name: /sign in/i })).toBeVisible();
 }
 
 export const test = base.extend({
