@@ -6,6 +6,7 @@ use App\Actions\StoreChirpAttachmentAction;
 use App\Http\Requests\ChirpRequest;
 use App\Models\Chirp;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -13,14 +14,21 @@ class ChirpController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index()
+    public function index(Request $request)
     {
-        $chirps = Chirp::with(['user', 'attachments', 'likes', 'comments.user', 'comments.likes', 'bookmarks'])
-            ->latest()
-            ->paginate(10)
-            ->withQueryString();
+        $feed = $request->query('feed') === 'following' ? 'following' : 'for-you';
 
-        return view('home', ['chirps' => $chirps]);
+        $query = Chirp::with(['user', 'attachments', 'likes', 'comments.user', 'comments.likes', 'bookmarks']);
+
+        if ($feed === 'following') {
+            $user = $request->user();
+            $followingIds = $user->following()->pluck('users.id')->push($user->id);
+            $query->whereIn('user_id', $followingIds);
+        }
+
+        $chirps = $query->latest()->paginate(10)->withQueryString();
+
+        return view('home', ['chirps' => $chirps, 'feed' => $feed]);
     }
 
     public function create()

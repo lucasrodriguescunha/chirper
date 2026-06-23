@@ -38,6 +38,7 @@ Live: [chirper-master-ej8kbb.laravel.cloud](https://chirper-master-ej8kbb.larave
 | Two-factor auth | TOTP enrollment with QR code at `/settings/two-factor`, single-use recovery codes (regenerable behind `current_password`), guest-only `/two-factor-challenge` after login, throttled 6/min |
 | Mail | Transactional mail via Resend (verification + password reset) |
 | Chirps | Create, edit (owner), delete, image-only attachment (`jpg/jpeg/png/webp/gif`, ≤ 2 MB), like/dislike reactions |
+| Feed | Twitter-style tabs on `/`: "For you" (all chirps) vs "Following" (chirps from followed users + self); selection survives pagination via `?feed=following`; empty Following state links to search to discover users |
 | Comments | Threaded under chirps, inline edit, owner delete, like/dislike |
 | Follow | Follow/unfollow users; counters on profile |
 | Profile | Public `/users/{user}` page with avatar, bio, chirp list, follower counters |

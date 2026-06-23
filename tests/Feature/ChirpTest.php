@@ -1,7 +1,10 @@
 <?php
 
 use App\Models\Chirp;
+use App\Models\ChirpAttachment;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
     $this->user = User::factory()->create();
@@ -15,6 +18,54 @@ it('lists chirps on the home page', function () {
     $response->assertOk();
     $response->assertViewIs('home');
     $response->assertViewHas('chirps');
+    $response->assertViewHas('feed', 'for-you');
+});
+
+it('for-you feed shows chirps from non-followed users', function () {
+    $stranger = User::factory()->create();
+    Chirp::factory()->for($stranger)->create(['message' => 'stranger chirp']);
+
+    $response = $this->actingAs($this->user)->get('/');
+
+    $response->assertOk();
+    $chirps = $response->viewData('chirps');
+    expect($chirps->pluck('message')->all())->toContain('stranger chirp');
+});
+
+it('following feed only shows chirps from followed users and self', function () {
+    $followed = User::factory()->create();
+    $stranger = User::factory()->create();
+
+    $this->user->following()->attach($followed->id);
+
+    Chirp::factory()->for($followed)->create(['message' => 'followed chirp']);
+    Chirp::factory()->for($stranger)->create(['message' => 'stranger chirp']);
+    Chirp::factory()->for($this->user)->create(['message' => 'self chirp']);
+
+    $response = $this->actingAs($this->user)->get('/?feed=following');
+
+    $response->assertOk();
+    $response->assertViewHas('feed', 'following');
+    $messages = $response->viewData('chirps')->pluck('message')->all();
+    expect($messages)->toContain('followed chirp');
+    expect($messages)->toContain('self chirp');
+    expect($messages)->not->toContain('stranger chirp');
+});
+
+it('following feed is empty when user follows nobody and has no chirps', function () {
+    Chirp::factory()->count(3)->create();
+
+    $response = $this->actingAs($this->user)->get('/?feed=following');
+
+    $response->assertOk();
+    expect($response->viewData('chirps')->total())->toBe(0);
+});
+
+it('treats unknown feed values as for-you', function () {
+    $response = $this->actingAs($this->user)->get('/?feed=bogus');
+
+    $response->assertOk();
+    $response->assertViewHas('feed', 'for-you');
 });
 
 it('redirects guests from the home page to login', function () {
@@ -117,4 +168,50 @@ it('forbids deleting a chirp not owned by the user', function () {
 
     $response->assertForbidden();
     expect(Chirp::find($chirp->id))->not->toBeNull();
+});
+
+it('stores a chirp with a valid image attachment', function () {
+    Storage::fake('public');
+    $file = UploadedFile::fake()->create('photo.jpg', 100, 'image/jpeg');
+
+    $response = $this->actingAs($this->user)->post('/chirps', [
+        'message' => 'chirp with attachment',
+        'attachment' => $file,
+    ]);
+
+    $response->assertRedirect('/');
+    $response->assertSessionHas('success');
+
+    $chirp = Chirp::where('message', 'chirp with attachment')->firstOrFail();
+    $attachment = $chirp->attachments()->first();
+
+    expect($attachment)->not->toBeNull();
+    expect($attachment->type)->toBe('jpg');
+    Storage::disk('public')->assertExists($attachment->path);
+});
+
+it('rejects an attachment with disallowed mime type', function () {
+    Storage::fake('public');
+    $file = UploadedFile::fake()->create('virus.exe', 100, 'application/octet-stream');
+
+    $response = $this->actingAs($this->user)->post('/chirps', [
+        'message' => 'bad file',
+        'attachment' => $file,
+    ]);
+
+    $response->assertSessionHasErrors('attachment');
+    expect(Chirp::where('message', 'bad file')->exists())->toBeFalse();
+});
+
+it('rejects an attachment larger than 2MB', function () {
+    Storage::fake('public');
+    $file = UploadedFile::fake()->create('big.pdf', 3000, 'application/pdf');
+
+    $response = $this->actingAs($this->user)->post('/chirps', [
+        'message' => 'too big',
+        'attachment' => $file,
+    ]);
+
+    $response->assertSessionHasErrors('attachment');
+    expect(Chirp::where('message', 'too big')->exists())->toBeFalse();
 });

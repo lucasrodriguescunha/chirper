@@ -4,6 +4,26 @@
     </x-slot:title>
     <div class="max-w-2xl mx-auto">
         <h1 class="text-2xl sm:text-3xl font-bold mt-6 sm:mt-8">Latest Chirps</h1>
+
+        <div role="tablist" class="tabs tabs-bordered mt-4 sm:mt-6" aria-label="Feed filter">
+            <a
+                href="/"
+                role="tab"
+                class="tab {{ $feed === 'for-you' ? 'tab-active font-semibold' : '' }}"
+                @if($feed === 'for-you') aria-selected="true" @endif
+            >
+                For you
+            </a>
+            <a
+                href="/?feed=following"
+                role="tab"
+                class="tab {{ $feed === 'following' ? 'tab-active font-semibold' : '' }}"
+                @if($feed === 'following') aria-selected="true" @endif
+            >
+                Following
+            </a>
+        </div>
+
         <div class="card bg-base-100 shadow mt-6 sm:mt-8">
             <div class="card-body">
                 <form method="POST" action="/chirps" enctype="multipart/form-data">
@@ -93,7 +113,11 @@
                             </svg>
 
                             <p class="mt-4 text-base-content/60">
-                                No chirps yet. Be the first to chirp!
+                                @if($feed === 'following')
+                                    No chirps from people you follow yet. <a href="{{ route('search') }}" class="link link-primary">Find users to follow</a>.
+                                @else
+                                    No chirps yet. Be the first to chirp!
+                                @endif
                             </p>
                         </div>
                     </div>
