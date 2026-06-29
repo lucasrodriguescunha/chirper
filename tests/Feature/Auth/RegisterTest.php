@@ -106,3 +106,76 @@ it('rejects registration with weak password missing uppercase, number, or symbol
 
     $response->assertSessionHasErrors('password');
 });
+
+it('rejects registration with invalid email format', function () {
+    $response = $this->post('/register', [
+        'name' => 'Alice',
+        'username' => 'alice',
+        'email' => 'not-an-email',
+        'password' => 'Secret-Pass1!',
+        'password_confirmation' => 'Secret-Pass1!',
+    ]);
+
+    $response->assertSessionHasErrors('email');
+});
+
+it('rejects registration with missing password confirmation', function () {
+    $response = $this->post('/register', [
+        'name' => 'Alice',
+        'username' => 'alice',
+        'email' => 'alice@example.com',
+        'password' => 'Secret-Pass1!',
+    ]);
+
+    $response->assertSessionHasErrors('password');
+});
+
+it('rejects registration with username shorter than 3 chars', function () {
+    $response = $this->post('/register', [
+        'name' => 'Alice',
+        'username' => 'al',
+        'email' => 'alice@example.com',
+        'password' => 'Secret-Pass1!',
+        'password_confirmation' => 'Secret-Pass1!',
+    ]);
+
+    $response->assertSessionHasErrors(['username' => 'Username must be at least 3 characters.']);
+});
+
+it('rejects registration with username longer than 30 chars', function () {
+    $response = $this->post('/register', [
+        'name' => 'Alice',
+        'username' => str_repeat('a', 31),
+        'email' => 'alice@example.com',
+        'password' => 'Secret-Pass1!',
+        'password_confirmation' => 'Secret-Pass1!',
+    ]);
+
+    $response->assertSessionHasErrors(['username' => 'Username must be 30 characters or less.']);
+});
+
+it('rejects registration with username containing punctuation', function () {
+    $response = $this->post('/register', [
+        'name' => 'Alice',
+        'username' => 'user!',
+        'email' => 'alice@example.com',
+        'password' => 'Secret-Pass1!',
+        'password_confirmation' => 'Secret-Pass1!',
+    ]);
+
+    $response->assertSessionHasErrors(['username' => 'Username may contain only letters, numbers, and underscores.']);
+});
+
+it('returns the expected error message when username is taken', function () {
+    User::factory()->create(['username' => 'taken']);
+
+    $response = $this->post('/register', [
+        'name' => 'Carl',
+        'username' => 'taken',
+        'email' => 'carl@example.com',
+        'password' => 'Secret-Pass1!',
+        'password_confirmation' => 'Secret-Pass1!',
+    ]);
+
+    $response->assertSessionHasErrors(['username' => 'This username is taken.']);
+});
