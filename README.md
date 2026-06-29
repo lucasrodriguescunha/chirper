@@ -12,6 +12,7 @@
 ![Pest](https://img.shields.io/badge/Pest-4-8B5CF6?logo=php&logoColor=white)
 ![Playwright](https://img.shields.io/badge/Playwright-E2E-2EAD33?logo=playwright&logoColor=white)
 ![Resend](https://img.shields.io/badge/Resend-Mail-000000?logo=resend&logoColor=white)
+![Stripe](https://img.shields.io/badge/Stripe-Payments-635BFF?logo=stripe&logoColor=white)
 ![Laravel Cloud](https://img.shields.io/badge/Deploy-Laravel%20Cloud-FF2D20?logo=laravel&logoColor=white)
 
 Twitter-style social mini-network built with Laravel 12. Users post short chirps, follow each other, comment, react with like/dislike, and get notified when others interact with their content.
@@ -25,7 +26,7 @@ Live: [chirper-master-ej8kbb.laravel.cloud](https://chirper-master-ej8kbb.larave
 - **Database**: SQLite (default), MySQL/PostgreSQL compatible via Eloquent
 - **Mail**: Resend (`resend/resend-laravel`) — `MAIL_MAILER=resend`, set `RESEND_API_KEY` in `.env`
 - **Bot protection**: Cloudflare Turnstile on login/register — set `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in `.env` (skipped automatically when blank in local dev)
-- **Payments**: Stripe via Laravel Cashier — set `STRIPE_KEY`, `STRIPE_SECRET`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_VERIFIED_PRICE_ID`, `CASHIER_CURRENCY=brl`. Local webhook forwarding: `stripe listen --forward-to localhost:8000/stripe/webhook`
+- **Payments**: Stripe via Laravel Cashier — set `STRIPE_KEY`, `STRIPE_SECRET`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_VERIFIED_PRICE_ID` (the **price** ID, not the product ID), `CASHIER_CURRENCY=brl`. Local webhook forwarding: `stripe listen --forward-to localhost:8000/stripe/webhook` — copy the printed `whsec_…` into `STRIPE_WEBHOOK_SECRET` and run `php artisan config:clear`. CSP `form-action` already allows `https://checkout.stripe.com` and `https://billing.stripe.com` so the checkout / portal redirects pass through
 - **2FA**: TOTP secrets and recovery codes stored on `users` (encrypted), QR code rendered as inline SVG
 - **Testing**: Pest 4 + pest-plugin-laravel; SQLite `:memory:` for fast feature tests
 - **E2E**: Playwright
@@ -161,7 +162,7 @@ Two DaisyUI themes are defined in `resources/css/app.css`: `laravelChirper` (lig
 - **Turnstile CAPTCHA** — login and register submissions are verified server-side against Cloudflare Turnstile when keys are configured.
 - **Two-factor authentication** — opt-in TOTP at `/settings/two-factor`. After a successful login on a 2FA-enabled account the user is redirected to `/two-factor-challenge` (guest-only, throttled `6/min`) and can authenticate with either a TOTP code or a one-time recovery code. Recovery codes can be regenerated behind `current_password`.
 - **Rate limiting** — every authentication endpoint and write endpoint is throttled. Login uses a custom limiter of 3 attempts per 15 min per `email+IP`; register, password reset, verification resend, and 2FA challenge use Laravel `throttle:` middleware; chirp/comment create are `20/min` and reactions `60/min`.
-- **HTTP security headers** — `SecurityHeaders` middleware sets `Content-Security-Policy`, `Strict-Transport-Security` (production only), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` (camera/mic/geolocation/payment disabled), and COOP / CORP for cross-origin isolation.
+- **HTTP security headers** — `SecurityHeaders` middleware sets `Content-Security-Policy`, `Strict-Transport-Security` (production only), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` (camera/mic/geolocation/payment disabled), and COOP / CORP for cross-origin isolation. CSP `form-action` allows `'self'` plus `https://checkout.stripe.com` and `https://billing.stripe.com` so Stripe Hosted Checkout and Customer Portal redirects pass through the policy.
 - **HTTPS in production** — schema is forced to HTTPS and `upgrade-insecure-requests` is added to the CSP when `APP_ENV=production`.
 - **Attachment hardening** — chirp uploads are restricted to images (`jpg/jpeg/png/webp/gif`, ≤ 2 MB) to remove PDF/text attack surface; uploads run inside a DB transaction and the file is cleaned up if the commit fails.
 - **Boot guard** — application refuses to boot when `APP_DEBUG=true` under `APP_ENV=production`, preventing stack-trace leaks in deployed environments.

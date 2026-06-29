@@ -387,17 +387,27 @@ Utilize dois navegadores ou duas abas anônimas:
 17. PAGAMENTO / VERIFIED BADGE (STRIPE)
 ==================================================
 
+0. Pré-requisitos (uma vez):
+   - .env preenchido com STRIPE_KEY, STRIPE_SECRET, STRIPE_VERIFIED_PRICE_ID
+     (price_..., NÃO prod_...), CASHIER_CURRENCY=brl.
+   - Stripe CLI instalado (winget install Stripe.StripeCLI).
+   - stripe login executado.
+   - Em outra aba: stripe listen --forward-to localhost:8000/stripe/webhook
+     → copiar whsec_... → .env STRIPE_WEBHOOK_SECRET → php artisan config:clear.
+
 1. Acessar /settings/billing autenticado:
    - Status inicial: "Not verified".
    - Botão "Get verified — R$ 5,00/mês" visível.
 
 2. Clicar em "Get verified":
    - Redirect para Stripe Hosted Checkout.
+   - CSP form-action deve liberar https://checkout.stripe.com (sem erro
+     "violates the following Content Security Policy directive" no console).
 
 3. Pagar com cartão de teste:
    - 4242 4242 4242 4242 / data futura / CVC qualquer.
-   - Webhook local: stripe listen --forward-to localhost:8000/stripe/webhook
-   - Pós-pagamento: verified_at preenchido.
+   - Pós-pagamento: webhook invoice.payment_succeeded chega no stripe listen.
+   - users.verified_at preenchido.
 
 4. Verificar badge azul (selo verified) aparece em:
    - Navbar (dropdown próprio nome)
@@ -411,7 +421,8 @@ Utilize dois navegadores ou duas abas anônimas:
    - Botões "Manage billing" e "Cancel subscription" visíveis.
 
 6. Clicar "Manage billing":
-   - Redirect para Stripe Customer Portal.
+   - Redirect para Stripe Customer Portal (https://billing.stripe.com).
+   - CSP form-action deve liberar o redirect.
    - Permite atualizar cartão.
 
 7. Clicar "Cancel subscription":
@@ -431,6 +442,8 @@ Utilize dois navegadores ou duas abas anônimas:
 10. Segurança:
     - POST /stripe/webhook deve estar excluído do CSRF.
     - Tentar POST /billing/checkout sem auth → redirect login.
+    - CSP do response em /settings/billing inclui
+      "form-action 'self' https://checkout.stripe.com https://billing.stripe.com".
 
 ==================================================
 18. AUTORIZAÇÃO E SEGURANÇA

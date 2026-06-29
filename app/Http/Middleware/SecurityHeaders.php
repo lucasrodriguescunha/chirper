@@ -44,7 +44,7 @@ class SecurityHeaders
             "font-src 'self' data: https://fonts.bunny.net".$viteOrigins,
             "connect-src 'self' https://challenges.cloudflare.com".$viteOrigins.$viteWs,
             'frame-src https://challenges.cloudflare.com',
-            "form-action 'self'",
+            "form-action 'self' https://checkout.stripe.com https://billing.stripe.com",
             "base-uri 'self'",
             "object-src 'none'",
             "frame-ancestors 'none'",
