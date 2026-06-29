@@ -17,6 +17,7 @@ class E2eResetCommand extends Command
     {
         if (app()->environment('production')) {
             $this->error('Refusing to run in production.');
+
             return self::FAILURE;
         }
 

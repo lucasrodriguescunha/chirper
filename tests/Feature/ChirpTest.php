@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Chirp;
-use App\Models\ChirpAttachment;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;

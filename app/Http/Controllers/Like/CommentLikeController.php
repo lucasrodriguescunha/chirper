@@ -32,8 +32,8 @@ class CommentLikeController extends Controller
         }
 
         $comment->loadCount([
-            'likes as likes_count' => fn($q) => $q->where('type', 'like'),
-            'likes as dislikes_count' => fn($q) => $q->where('type', 'dislike'),
+            'likes as likes_count' => fn ($q) => $q->where('type', 'like'),
+            'likes as dislikes_count' => fn ($q) => $q->where('type', 'dislike'),
         ]);
 
         return response()->json([

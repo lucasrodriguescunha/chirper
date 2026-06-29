@@ -26,6 +26,6 @@ class LikeFactory extends Factory
 
     public function dislike(): static
     {
-        return $this->state(fn() => ['type' => 'dislike']);
+        return $this->state(fn () => ['type' => 'dislike']);
     }
 }

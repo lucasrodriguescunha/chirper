@@ -16,7 +16,7 @@ class SearchController extends Controller
         $chirps = null;
 
         if ($q !== '') {
-            $like = '%' . str_replace(['%', '_'], ['\%', '\_'], $q) . '%';
+            $like = '%'.str_replace(['%', '_'], ['\%', '\_'], $q).'%';
 
             $users = User::query()
                 ->where('name', 'like', $like)
@@ -48,7 +48,7 @@ class SearchController extends Controller
             return response()->json(['users' => [], 'chirps' => []]);
         }
 
-        $like = '%' . str_replace(['%', '_'], ['\%', '\_'], $q) . '%';
+        $like = '%'.str_replace(['%', '_'], ['\%', '\_'], $q).'%';
 
         $users = User::query()
             ->where('name', 'like', $like)
@@ -73,7 +73,7 @@ class SearchController extends Controller
                 'id' => $c->id,
                 'message' => \Illuminate\Support\Str::limit($c->message, 120),
                 'author' => $c->user->name,
-                'url' => route('search', ['q' => $q]) . '#chirp-' . $c->id,
+                'url' => route('search', ['q' => $q]).'#chirp-'.$c->id,
             ]);
 
         return response()->json([

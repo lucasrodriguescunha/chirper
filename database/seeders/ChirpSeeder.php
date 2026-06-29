@@ -29,7 +29,7 @@ class ChirpSeeder extends Seeder
                     'name' => 'Charlie Coder',
                     'email' => 'charlie@example.com',
                     'password' => bcrypt('password'),
-                ])
+                ]),
             ])
             : User::take(3)->get();
 
@@ -40,7 +40,7 @@ class ChirpSeeder extends Seeder
             "Laravel's Eloquent ORM is pure magic ✨",
             'Deployed my first app with Laravel Cloud. So smooth!',
             'Who else loves Blade components?',
-            'Friday deploys with Laravel? No problem! 😎'
+            'Friday deploys with Laravel? No problem! 😎',
         ];
 
         // Create chirps for random users

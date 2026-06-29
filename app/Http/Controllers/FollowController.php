@@ -13,7 +13,7 @@ class FollowController extends Controller
 
         $changes = auth()->user()->following()->syncWithoutDetaching([$user->id]);
 
-        if (!empty($changes['attached'])) {
+        if (! empty($changes['attached'])) {
             $user->notify(new NewFollowerNotification(auth()->user()));
         }
 

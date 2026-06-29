@@ -20,6 +20,7 @@ class Turnstile implements ValidationRule
 
         if (empty($value) || ! is_string($value)) {
             $fail('Please complete the CAPTCHA challenge.');
+
             return;
         }
 

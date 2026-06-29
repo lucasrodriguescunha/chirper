@@ -12,9 +12,7 @@ use PragmaRX\Google2FA\Google2FA;
 
 class TwoFactorService
 {
-    public function __construct(private Google2FA $google2FA)
-    {
-    }
+    public function __construct(private Google2FA $google2FA) {}
 
     public function generateSecret(): string
     {
@@ -37,7 +35,7 @@ class TwoFactorService
     {
         $renderer = new ImageRenderer(
             new RendererStyle($size, 1),
-            new SvgImageBackEnd()
+            new SvgImageBackEnd
         );
 
         $writer = new Writer($renderer);
@@ -48,7 +46,7 @@ class TwoFactorService
     public function generateRecoveryCodes(int $count = 8): array
     {
         return collect(range(1, $count))
-            ->map(fn () => Str::lower(Str::random(5)) . '-' . Str::lower(Str::random(5)))
+            ->map(fn () => Str::lower(Str::random(5)).'-'.Str::lower(Str::random(5)))
             ->all();
     }
 

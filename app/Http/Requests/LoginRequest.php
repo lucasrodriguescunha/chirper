@@ -11,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 class LoginRequest extends FormRequest
 {
     protected int $maxAttempts = 3;
+
     protected int $decaySeconds = 900;
 
     /**
@@ -27,14 +28,15 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'    => 'required|email',
+            'email' => 'required|email',
             'password' => 'required',
-            'cf-turnstile-response' => ['nullable', 'string', new Turnstile()],
+            'cf-turnstile-response' => ['nullable', 'string', new Turnstile],
         ];
     }
 
     /**
      * Perform additional validation after the base rules pass.
+     *
      * @throws ValidationException
      */
     public function after(): array
@@ -42,7 +44,7 @@ class LoginRequest extends FormRequest
         return [
             function () {
                 $this->checkTooManyAttempts();
-            }
+            },
         ];
     }
 
@@ -51,7 +53,7 @@ class LoginRequest extends FormRequest
      */
     public function checkTooManyAttempts(): void
     {
-        if (!RateLimiter::tooManyAttempts($this->throttleKey(), $this->maxAttempts)) {
+        if (! RateLimiter::tooManyAttempts($this->throttleKey(), $this->maxAttempts)) {
             return;
         }
 
@@ -74,21 +76,23 @@ class LoginRequest extends FormRequest
 
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->input('email'))) . '|' . $this->ip();
+        return Str::transliterate(Str::lower($this->input('email'))).'|'.$this->ip();
     }
 
     protected function formatWaitTime(int $seconds): string
     {
         if ($seconds < 60) {
-            return "$seconds second" . ($seconds !== 1 ? 's' : '');
+            return "$seconds second".($seconds !== 1 ? 's' : '');
         }
 
         if ($seconds < 3600) {
             $minutes = (int) ceil($seconds / 60);
-            return "$minutes minute" . ($minutes !== 1 ? 's' : '');
+
+            return "$minutes minute".($minutes !== 1 ? 's' : '');
         }
 
         $hours = (int) ceil($seconds / 3600);
-        return "$hours hour" . ($hours !== 1 ? 's' : '');
+
+        return "$hours hour".($hours !== 1 ? 's' : '');
     }
 }

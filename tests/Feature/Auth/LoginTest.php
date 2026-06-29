@@ -55,7 +55,7 @@ it('blocks login after too many attempts', function () {
     $response->assertSessionHasErrors('email');
     $this->assertGuest();
 
-    RateLimiter::clear(strtolower('limited@example.com') . '|127.0.0.1');
+    RateLimiter::clear(strtolower('limited@example.com').'|127.0.0.1');
 });
 
 it('logs out an authenticated user', function () {

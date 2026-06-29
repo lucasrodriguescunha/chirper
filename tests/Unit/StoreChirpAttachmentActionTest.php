@@ -13,7 +13,7 @@ it('stores file on public disk and creates attachment row', function () {
     $chirp = Chirp::factory()->for($user)->create();
     $file = UploadedFile::fake()->create('photo.png', 100, 'image/png');
 
-    $path = (new StoreChirpAttachmentAction())->execute($chirp, $file);
+    $path = (new StoreChirpAttachmentAction)->execute($chirp, $file);
 
     expect($path)->toBeString();
     Storage::disk('public')->assertExists($path);
@@ -28,7 +28,7 @@ it('deletes a stored file from disk', function () {
     $chirp = Chirp::factory()->for($user)->create();
     $file = UploadedFile::fake()->create('photo.png', 100, 'image/png');
 
-    $action = new StoreChirpAttachmentAction();
+    $action = new StoreChirpAttachmentAction;
     $path = $action->execute($chirp, $file);
 
     Storage::disk('public')->assertExists($path);

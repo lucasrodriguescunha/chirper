@@ -14,7 +14,7 @@ class TagController extends Controller
         $name = Str::of($slug)->lower()->toString();
 
         if (! preg_match('/^[a-z0-9_]{2,50}$/', $name)) {
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException;
         }
 
         $tag = Tag::where('name', $name)->firstOrFail();

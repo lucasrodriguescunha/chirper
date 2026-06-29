@@ -10,9 +10,7 @@ use Illuminate\View\View;
 
 class TwoFactorController extends Controller
 {
-    public function __construct(private TwoFactorService $service)
-    {
-    }
+    public function __construct(private TwoFactorService $service) {}
 
     public function index(Request $request): View
     {

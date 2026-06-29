@@ -45,7 +45,7 @@ class LikeController extends Controller
             },
             'likes as dislikes_count' => function ($query) {
                 $query->where('type', 'dislike');
-            }
+            },
         ]);
 
         return response()->json([

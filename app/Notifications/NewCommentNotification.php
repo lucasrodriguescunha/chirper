@@ -30,7 +30,7 @@ class NewCommentNotification extends Notification
             'chirp_id' => $this->chirp->id,
             'comment_id' => $this->comment->id,
             'url' => route('users.show', $this->chirp->user_id),
-            'message' => "{$this->commenter->name} commented: \"" . Str::limit($this->comment->body, 60) . '"',
+            'message' => "{$this->commenter->name} commented: \"".Str::limit($this->comment->body, 60).'"',
         ];
     }
 }

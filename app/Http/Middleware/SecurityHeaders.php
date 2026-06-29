@@ -43,7 +43,7 @@ class SecurityHeaders
             "img-src 'self' data: https://avatars.laravel.cloud https://chirper.laravel.cloud",
             "font-src 'self' data: https://fonts.bunny.net".$viteOrigins,
             "connect-src 'self' https://challenges.cloudflare.com".$viteOrigins.$viteWs,
-            "frame-src https://challenges.cloudflare.com",
+            'frame-src https://challenges.cloudflare.com',
             "form-action 'self'",
             "base-uri 'self'",
             "object-src 'none'",

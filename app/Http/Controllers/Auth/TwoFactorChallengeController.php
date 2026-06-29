@@ -12,9 +12,7 @@ use Illuminate\View\View;
 
 class TwoFactorChallengeController extends Controller
 {
-    public function __construct(private TwoFactorService $service)
-    {
-    }
+    public function __construct(private TwoFactorService $service) {}
 
     public function show(Request $request): View|RedirectResponse
     {
@@ -42,6 +40,7 @@ class TwoFactorChallengeController extends Controller
 
         if (! $user || ! $user->hasTwoFactorEnabled()) {
             $request->session()->forget(['two_factor.user_id', 'two_factor.remember']);
+
             return redirect()->route('login');
         }
 

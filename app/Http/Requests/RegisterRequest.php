@@ -26,7 +26,7 @@ class RegisterRequest extends FormRequest
             'username' => ['required', 'string', 'min:3', 'max:30', 'regex:/^[a-zA-Z0-9_]+$/', 'unique:users,username'],
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'string', 'confirmed', Password::defaults()],
-            'cf-turnstile-response' => ['nullable', 'string', new Turnstile()],
+            'cf-turnstile-response' => ['nullable', 'string', new Turnstile],
         ];
     }
 

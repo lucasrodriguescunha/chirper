@@ -22,7 +22,7 @@ class Chirp extends Model
         'file_path',
         'file_type',
         'path',
-        'type'
+        'type',
     ];
 
     public function mentionedUsernames(): array
@@ -91,6 +91,7 @@ class Chirp extends Model
 
         if (empty($names)) {
             $this->tags()->sync([]);
+
             return;
         }
 
