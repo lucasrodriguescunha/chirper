@@ -13,7 +13,7 @@ class StoreChirpAttachmentAction
      */
     public function execute(Chirp $chirp, UploadedFile $file): string|false
     {
-        $path = $file->storePublicly('attachments');
+        $path = $file->store('attachments');
         $extension = $file->getClientOriginalExtension();
 
         $chirp->attachments()->create([
