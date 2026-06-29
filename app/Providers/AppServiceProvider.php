@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Listeners\HandleVerifiedSubscription;
 use App\Models\User;
 use Illuminate\Notifications\Events\NotificationSent;
 use Illuminate\Pagination\Paginator;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Laravel\Cashier\Events\WebhookReceived;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,6 +34,8 @@ class AppServiceProvider extends ServiceProvider
                 $event->notifiable->forgetUnreadNotificationsCount();
             }
         });
+
+        Event::listen(WebhookReceived::class, HandleVerifiedSubscription::class);
 
         if ($this->app->isProduction()) {
             URL::forceScheme('https');

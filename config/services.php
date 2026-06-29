@@ -40,4 +40,8 @@ return [
         'secret_key' => env('TURNSTILE_SECRET_KEY'),
     ],
 
+    'stripe' => [
+        'verified_price_id' => env('STRIPE_VERIFIED_PRICE_ID'),
+    ],
+
 ];

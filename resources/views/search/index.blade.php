@@ -33,7 +33,7 @@
                             <a href="{{ route('users.show', $user) }}" class="flex items-center gap-3 p-3">
                                 <img src="{{ $user->avatarUrl() }}" class="size-10 rounded-full" alt="{{ $user->name }}"/>
                                 <div>
-                                    <div class="font-semibold">{{ $user->name }}</div>
+                                    <div class="font-semibold inline-flex items-center">{{ $user->name }}<x-verified-badge :user="$user" /></div>
                                     @if ($user->bio)
                                         <div class="text-sm text-base-content/60 line-clamp-1">{{ $user->bio }}</div>
                                     @endif

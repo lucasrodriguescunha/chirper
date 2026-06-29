@@ -15,7 +15,7 @@
 
                     <div class="flex-1 min-w-0">
                         <div class="flex flex-wrap items-center justify-between gap-2">
-                            <h1 class="text-xl sm:text-2xl font-bold truncate">{{ $user->name }}</h1>
+                            <h1 class="text-xl sm:text-2xl font-bold truncate inline-flex items-center">{{ $user->name }}<x-verified-badge :user="$user" class="w-5 h-5 ml-1.5" /></h1>
 
                             @auth
                                 @if ($user->id !== auth()->id())

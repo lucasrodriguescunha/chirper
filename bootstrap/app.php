@@ -14,6 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
         $middleware->append(SecurityHeaders::class);
+        $middleware->validateCsrfTokens(except: [
+            'stripe/*',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

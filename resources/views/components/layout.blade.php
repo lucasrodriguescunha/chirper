@@ -118,7 +118,7 @@
                                 <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->name }}" class="object-cover w-full h-full"/>
                             </div>
                         </div>
-                        <span class="hidden sm:inline text-sm">{{ auth()->user()->name }}</span>
+                        <span class="hidden sm:inline text-sm inline-flex items-center">{{ auth()->user()->name }}<x-verified-badge :user="auth()->user()" class="w-3.5 h-3.5 ml-1" /></span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                         </svg>
@@ -126,6 +126,7 @@
                     <ul tabindex="0" class="dropdown-content menu z-1 mt-3 w-52 rounded-box bg-base-100 p-2 shadow">
                         @if (auth()->user()->hasVerifiedEmail())
                             <li><a href="{{ route('settings.profile.edit') }}">Profile</a></li>
+                            <li><a href="{{ route('settings.billing.index') }}">Billing</a></li>
                             <li>
                                 <form method="POST" action="/logout">
                                     @csrf
@@ -193,6 +194,7 @@
                     </li>
                     @if (auth()->user()->hasVerifiedEmail())
                         <li><a href="{{ route('settings.profile.edit') }}">Profile</a></li>
+                        <li><a href="{{ route('settings.billing.index') }}">Billing</a></li>
                         <li>
                             <form method="POST" action="/logout">
                                 @csrf

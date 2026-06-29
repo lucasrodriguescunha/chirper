@@ -32,8 +32,9 @@
                 <div class="flex flex-wrap items-start justify-between gap-2 w-full">
                     <div class="flex flex-wrap items-center gap-x-1 min-w-0">
                         @if ($chirp->user)
-                            <a href="{{ route('users.show', $chirp->user) }}" class="text-sm font-semibold hover:underline truncate max-w-[60vw]">
+                            <a href="{{ route('users.show', $chirp->user) }}" class="text-sm font-semibold hover:underline truncate max-w-[60vw] inline-flex items-center">
                                 {{ $chirp->user->name }}
+                                <x-verified-badge :user="$chirp->user" />
                             </a>
                         @else
                             <span class="text-sm font-semibold">Anonymous</span>

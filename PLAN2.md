@@ -384,7 +384,56 @@ Utilize dois navegadores ou duas abas anônimas:
    - Lista deve ficar vazia.
 
 ==================================================
-17. AUTORIZAÇÃO E SEGURANÇA
+17. PAGAMENTO / VERIFIED BADGE (STRIPE)
+==================================================
+
+1. Acessar /settings/billing autenticado:
+   - Status inicial: "Not verified".
+   - Botão "Get verified — R$ 5,00/mês" visível.
+
+2. Clicar em "Get verified":
+   - Redirect para Stripe Hosted Checkout.
+
+3. Pagar com cartão de teste:
+   - 4242 4242 4242 4242 / data futura / CVC qualquer.
+   - Webhook local: stripe listen --forward-to localhost:8000/stripe/webhook
+   - Pós-pagamento: verified_at preenchido.
+
+4. Verificar badge azul (selo verified) aparece em:
+   - Navbar (dropdown próprio nome)
+   - Chirps no feed (autor)
+   - Comentários (autor)
+   - Página de perfil /users/{id}
+   - Resultados de busca
+
+5. Acessar /settings/billing:
+   - Status "Verified" exibido.
+   - Botões "Manage billing" e "Cancel subscription" visíveis.
+
+6. Clicar "Manage billing":
+   - Redirect para Stripe Customer Portal.
+   - Permite atualizar cartão.
+
+7. Clicar "Cancel subscription":
+   - Confirma cancelamento.
+   - Estado: "Grace period" — badge permanece até fim do ciclo pago.
+   - ends_at definido.
+
+8. Testar falha de pagamento:
+   - Cartão 4000 0000 0000 9995 (insufficient funds).
+   - Webhook invoice.payment_failed → verified_at = null.
+   - Badge removido em todas as views.
+
+9. Testar 3D Secure:
+   - Cartão 4000 0025 0000 3155.
+   - Completar challenge no Stripe.
+
+10. Segurança:
+    - POST /stripe/webhook deve estar excluído do CSRF.
+    - Tentar POST /billing/checkout sem auth → redirect login.
+
+==================================================
+18. AUTORIZAÇÃO E SEGURANÇA
 ==================================================
 
 1. Deslogado, tentar acessar:
@@ -418,7 +467,7 @@ Utilize dois navegadores ou duas abas anônimas:
    - APP_DEBUG=true + APP_ENV=production → app deve recusar boot.
 
 ==================================================
-18. RESPONSIVIDADE
+19. RESPONSIVIDADE
 ==================================================
 
 1. Abrir DevTools.
@@ -428,7 +477,7 @@ Utilize dois navegadores ou duas abas anônimas:
 3. Verificar navbar:
    - Deve colapsar em dropdown hambúrguer.
 
-4. Reexecutar todos os testes dos itens 1 ao 17.
+4. Reexecutar todos os testes dos itens 1 ao 18.
 
 ==================================================
 COBERTURA

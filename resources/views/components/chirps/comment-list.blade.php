@@ -20,7 +20,7 @@
             </div>
         </a>
         <div class="flex-1 min-w-0 bg-base-200 rounded-lg px-3 py-2 text-sm break-words">
-            <a href="{{ route('users.show', $comment->user) }}" class="font-semibold hover:underline">{{ $comment->user->name }}</a>
+            <a href="{{ route('users.show', $comment->user) }}" class="font-semibold hover:underline inline-flex items-center">{{ $comment->user->name }}<x-verified-badge :user="$comment->user" class="w-3.5 h-3.5 ml-1" /></a>
 
             @if ($comment->updated_at->gt($comment->created_at->addSeconds(5)))
                 <span class="text-xs text-base-content/60 italic">

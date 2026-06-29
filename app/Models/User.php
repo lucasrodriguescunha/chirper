@@ -11,11 +11,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Cashier\Billable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use Billable, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -37,7 +38,7 @@ class User extends Authenticatable implements MustVerifyEmail
             return Storage::disk('public')->url($this->avatar);
         }
 
-        return 'https://avatars.laravel.cloud/' . urlencode($this->email) . '?vibe=ocean';
+        return 'https://avatars.laravel.cloud/'.urlencode($this->email).'?vibe=ocean';
     }
 
     /**
@@ -61,11 +62,17 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
+            'verified_at' => 'datetime',
             'password' => 'hashed',
             'two_factor_secret' => 'encrypted',
             'two_factor_recovery_codes' => 'encrypted',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    public function isVerified(): bool
+    {
+        return ! is_null($this->verified_at);
     }
 
     public function hasTwoFactorEnabled(): bool

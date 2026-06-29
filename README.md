@@ -25,6 +25,7 @@ Live: [chirper-master-ej8kbb.laravel.cloud](https://chirper-master-ej8kbb.larave
 - **Database**: SQLite (default), MySQL/PostgreSQL compatible via Eloquent
 - **Mail**: Resend (`resend/resend-laravel`) — `MAIL_MAILER=resend`, set `RESEND_API_KEY` in `.env`
 - **Bot protection**: Cloudflare Turnstile on login/register — set `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in `.env` (skipped automatically when blank in local dev)
+- **Payments**: Stripe via Laravel Cashier — set `STRIPE_KEY`, `STRIPE_SECRET`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_VERIFIED_PRICE_ID`, `CASHIER_CURRENCY=brl`. Local webhook forwarding: `stripe listen --forward-to localhost:8000/stripe/webhook`
 - **2FA**: TOTP secrets and recovery codes stored on `users` (encrypted), QR code rendered as inline SVG
 - **Testing**: Pest 4 + pest-plugin-laravel; SQLite `:memory:` for fast feature tests
 - **E2E**: Playwright
@@ -41,6 +42,7 @@ Live: [chirper-master-ej8kbb.laravel.cloud](https://chirper-master-ej8kbb.larave
 | Feed | Twitter-style tabs on `/`: "For you" (all chirps) vs "Following" (chirps from followed users + self); selection survives pagination via `?feed=following`; empty Following state links to search to discover users |
 | Mentions | `@username` mentions parsed from chirp body (3–30 chars, `[A-Za-z0-9_]`); resolved handles render as profile links, unknown handles stay as plain text, HTML escaped first to keep rendering XSS-safe; mentioned users receive a `NewMentionNotification` on create; edits only notify *newly added* mentions (no re-notify on minor edits); self-mentions silent |
 | Hashtags | `#tag` parsed from chirp body; clickable hashtags link to per-tag listing at `/tag/{slug}`; tag page shows all chirps containing that hashtag; multiple tags per chirp supported |
+| Verified badge | Paid R$ 5.00/month subscription via Stripe + Laravel Cashier grants a blue verified checkmark next to the user's name across the app; `/settings/billing` exposes Stripe Hosted Checkout, the Customer Portal, and cancel-at-period-end; webhook listener flips `users.verified_at` on `invoice.payment_succeeded` and clears it on `customer.subscription.deleted` / `invoice.payment_failed` |
 | Comments | Threaded under chirps, inline edit, owner delete, like/dislike |
 | Follow | Follow/unfollow users; counters on profile |
 | Profile | Public `/users/{user}` page with avatar, bio, chirp list, follower counters |
@@ -59,16 +61,18 @@ Live: [chirper-master-ej8kbb.laravel.cloud](https://chirper-master-ej8kbb.larave
 
 ```
 app/
-  Http/Controllers/      Chirp, Comment, Follow, Like, Notification, Search, User, Bookmark, Tag
+  Http/Controllers/      Chirp, Comment, Follow, Like, Notification, Search, User, Bookmark, Tag, Settings\Billing
   Notifications/         NewFollower, NewComment, NewLike, NewMention (database channel)
-  Models/                User, Chirp, Comment, Like, Follow, ChirpAttachment, Bookmark
-database/migrations/     Users, chirps, likes, comments, follows, notifications, bookmarks, ...
+  Listeners/             HandleVerifiedSubscription (Cashier WebhookReceived)
+  Models/                User (Billable), Chirp, Comment, Like, Follow, ChirpAttachment, Bookmark
+database/migrations/     Users, chirps, likes, comments, follows, notifications, bookmarks,
+                         subscriptions, subscription_items, customer columns, verified_at, ...
 resources/
   views/                 Blade pages + chirps/comments components
   js/                    charCounter, commentEdit, userReaction, sendChirpAttachment, commandPalette
   css/app.css            laravelChirper + laravelChirperDark DaisyUI themes
 routes/                  Split per resource: web, auth, chirps, comments, follows,
-                         users, search, notifications, bookmarks, tags,
+                         users, search, notifications, bookmarks, tags, billing,
                          two_factor, password, profile, verification
 tests/Feature/           Pest feature tests (auth, chirps, comments, follows, ...)
 tests/e2e/               Playwright specs + global-setup + helpers
