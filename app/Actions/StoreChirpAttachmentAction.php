@@ -13,7 +13,7 @@ class StoreChirpAttachmentAction
      */
     public function execute(Chirp $chirp, UploadedFile $file): string|false
     {
-        $path = $file->store('attachments', 'public');
+        $path = $file->storePublicly('attachments');
         $extension = $file->getClientOriginalExtension();
 
         $chirp->attachments()->create([
@@ -29,6 +29,6 @@ class StoreChirpAttachmentAction
      */
     public function delete(string $path): void
     {
-        Storage::disk('public')->delete($path);
+        Storage::delete($path);
     }
 }

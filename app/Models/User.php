@@ -34,8 +34,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function avatarUrl(): string
     {
-        if ($this->avatar && Storage::disk('public')->exists($this->avatar)) {
-            return Storage::disk('public')->url($this->avatar);
+        if ($this->avatar && Storage::exists($this->avatar)) {
+            return Storage::url($this->avatar);
         }
 
         return 'https://avatars.laravel.cloud/'.urlencode($this->email).'?vibe=ocean';

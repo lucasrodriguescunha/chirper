@@ -76,7 +76,7 @@
 
                 <x-chirps.message :chirp="$chirp" />
 
-                @if ($chirp->attachments?->path && Storage::disk('public')->exists($chirp->attachments->path))
+                @if ($chirp->attachments?->path)
                     <img class="mt-1 max-w-full h-auto rounded-md" src="{{ Storage::url($chirp->attachments->path) }}" alt=""/>
                 @endif
 

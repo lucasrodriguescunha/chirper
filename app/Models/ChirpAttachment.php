@@ -24,8 +24,8 @@ class ChirpAttachment extends Model
      */
     public function url(): ?string
     {
-        return $this->file_path
-            ? Storage::url($this->file_path)
+        return $this->path
+            ? Storage::url($this->path)
             : null;
     }
 }
