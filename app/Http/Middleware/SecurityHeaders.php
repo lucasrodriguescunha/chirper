@@ -36,11 +36,16 @@ class SecurityHeaders
         $viteOrigins = $isProduction ? '' : ' http://localhost:5173 http://localhost:5174';
         $viteWs = $isProduction ? '' : ' ws://localhost:5173 ws://localhost:5174';
 
+        $imgSrc = "img-src 'self' data: https://avatars.laravel.cloud https://chirper.laravel.cloud";
+        if ($storageOrigin = $this->storageOrigin()) {
+            $imgSrc .= ' '.$storageOrigin;
+        }
+
         $directives = [
             "default-src 'self'",
             "script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com".$viteOrigins,
             "style-src 'self' 'unsafe-inline' https://fonts.bunny.net".$viteOrigins,
-            "img-src 'self' data: https://avatars.laravel.cloud https://chirper.laravel.cloud",
+            $imgSrc,
             "font-src 'self' data: https://fonts.bunny.net".$viteOrigins,
             "connect-src 'self' https://challenges.cloudflare.com".$viteOrigins.$viteWs,
             'frame-src https://challenges.cloudflare.com',
@@ -55,6 +60,27 @@ class SecurityHeaders
         }
 
         return implode('; ', $directives);
+    }
+
+    /**
+     * Scheme + host of the configured object-storage disk (e.g. the R2 bucket
+     * URL), so uploaded images aren't blocked by the img-src CSP directive.
+     */
+    private function storageOrigin(): ?string
+    {
+        $url = config('filesystems.disks.s3.url');
+
+        if (! $url) {
+            return null;
+        }
+
+        $parts = parse_url($url);
+
+        if (empty($parts['scheme']) || empty($parts['host'])) {
+            return null;
+        }
+
+        return $parts['scheme'].'://'.$parts['host'];
     }
 
     private function permissionsPolicy(): string
